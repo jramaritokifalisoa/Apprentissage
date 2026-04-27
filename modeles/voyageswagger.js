@@ -104,5 +104,30 @@ module.exports = {
         },
       },
     },
+    delete: {
+      summary: "Suprimer un voyage",
+      parameters: [
+        {
+          name: "id",
+          in: "path",
+          required: true,
+          schema: {
+            type: "number",
+          },
+          description: "ID du voyage",
+        },
+      ],
+      responses: {
+        200: {
+          description: "Voyage suprimer avec succès",
+        },
+        404: {
+          description: "Voyage introuvable",
+        },
+        400: {
+          description: "Données invalides",
+        },
+      },
+    },
   },
 };
