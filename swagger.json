@@ -1,0 +1,83 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "API Nodejs",
+    "version": "1.0.0",
+    "description": "Mon backend expressjs"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:5020"
+    }
+  ],
+  "paths": {
+    "/register": {
+      "post": {
+        "summary": "Créer un compte",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "password": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Inscription réussie"
+          }
+        }
+      }
+    },
+
+    "/login": {
+      "post": {
+        "summary": "Connexion utilisateur",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "password": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Connexion réussie"
+          }
+        }
+      }
+    },
+
+    "/me": {
+      "get": {
+        "summary": "Voir profil",
+        "responses": {
+          "200": {
+            "description": "Profil utilisateur"
+          }
+        }
+      }
+    }
+  }
+}
