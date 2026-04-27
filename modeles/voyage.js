@@ -1,41 +1,78 @@
 const express = require("express");
+const client = require("../db");
 const router = express.Router();
-const voyages = [
-  {
-    id: 1,
-    destination: "Antananarivo",
-    prix: 200,
-  },
-  {
-    id: 2,
-    destination: "Toamasina",
-    prix: 150,
-  },
-  {
-    id: 3,
-    destination: "Majunga",
-    prix: 110,
-  },
-  {
-    id: 4,
-    destination: "Maanakara",
-    prix: 170,
-  },
-];
+router
+  .route("/api/voyages")
+  .get(async (req, res) => {
+    try {
+      const result = await client.query(
+        "SELECT * FROM voyages ORDER BY id ASC",
+      );
+      res.json(result.rows);
+    } catch (error) {
+      res.status(500).send("Erreur serveur");
+    }
+  })
 
-router.get("/api/voyages", (req, res) => {
-  res.send(voyages);
-});
+  .post(async (req, res) => {
+    const { destination, prix } = req.body;
 
-router.get("/api/voyages/:id", (req, res) => {
-  const id = parseInt(req.params.id);
+    if (!destination || !prix) {
+      return res.status(400).send("Données manquantes");
+    }
 
-  const voyage = voyages.find((v) => v.id == id);
-  if (voyage) {
-    res.send(voyage);
-  } else {
-    res.send("Id introuvable");
-  }
-});
+    try {
+      const result = await client.query(
+        "INSERT INTO voyages(destination, prix) VALUES($1, $2) RETURNING *",
+        [destination, prix],
+      );
 
+      res.status(201).json(result.rows[0]);
+    } catch (error) {
+      res.status(500).send("Erreur serveur");
+    }
+  });
+
+router
+  .route("/api/voyages/:id")
+  .get(async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+
+      const result = await client.query("SELECT * FROM voyages WHERE id = $1", [
+        id,
+      ]);
+
+      if (result.rows.length === 0) {
+        return res.status(404).send("Id inexistant");
+      }
+
+      res.json(result.rows[0]);
+    } catch (error) {
+      res.status(500).send("Erreur serveur");
+    }
+  })
+
+  .put(async (req, res) => {
+    const { destination, prix } = req.body;
+
+    if (!destination || !prix) {
+      return res.status(400).send("Données manquantes");
+    }
+
+    try {
+      const result = await client.query(
+        "UPDATE voyages SET destination = $1, prix = $2 WHERE id = $3 RETURNING *",
+        [destination, prix, req.params.id],
+      );
+
+      if (result.rows.length === 0) {
+        return res.status(404).send("Id inexistant");
+      }
+
+      res.json(result.rows[0]);
+    } catch (error) {
+      res.status(500).send("Erreur serveur");
+    }
+  });
 module.exports = router;
