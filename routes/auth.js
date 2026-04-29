@@ -2,14 +2,14 @@ const express = require("express");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const client = require("../config/db");
-const { setRegister, setMe, setLogin } = require("../controllers/auth");
+const { setPost, getPost, setLogin } = require("../controllers/auth");
 const router = express.Router();
 
 const SECRET_KEY = "mon_secret_jwt";
 
-router.post("/register", setRegister);
+router.post("/register", setPost);
 
-router.get("/me", setMe);
+router.get("/me", getPost);
 
 router.post("/login", setLogin);
 

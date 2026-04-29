@@ -1,7 +1,7 @@
 const express = require("express");
 const client = require("../config/db");
 
-module.exports.setRegister = async (req, res) => {
+module.exports.setPost = async (req, res) => {
   const { name, password } = req.body;
 
   if (!name || !password) {
@@ -31,7 +31,7 @@ module.exports.setRegister = async (req, res) => {
   }
 };
 
-module.exports.setMe = async (req, res) => {
+module.exports.getPost = async (req, res) => {
   const { name } = req.query;
   if (!name) {
     return res.send("Nom manquant");

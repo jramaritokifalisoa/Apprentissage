@@ -1,19 +1,19 @@
 const express = require("express");
 const client = require("../config/db");
 const {
-  setGetV,
-  setPostV,
-  setGetI,
-  setPutI,
-  setDeleteI,
+  getPost,
+  setPost,
+  getPostI,
+  editPost,
+  deletePost,
 } = require("../controllers/voyage");
 const router = express.Router();
-router.route("/api/voyages").get(setGetV).post(setPostV);
+router.route("/api/voyages").get(getPost).post(setPost);
 
 router
   .route("/api/voyages/:id")
-  .get(setGetI)
+  .get(getPostI)
 
-  .put(setPutI)
-  .delete(setDeleteI);
+  .put(editPost)
+  .delete(deletePost);
 module.exports = router;

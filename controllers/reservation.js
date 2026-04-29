@@ -9,7 +9,6 @@ module.exports.setPost = async (req, res) => {
       return res.status(400).send("Données manquantes");
     }
 
-    // vérifier que le voyage appartient à l'admin
     const voyageResult = await client.query(
       "SELECT * FROM voyages WHERE id = $1 AND admin_id = $2",
       [voyage_id, admin_id],
@@ -31,7 +30,7 @@ module.exports.setPost = async (req, res) => {
   }
 };
 
-module.exports.setGet = async (req, res) => {
+module.exports.getPost = async (req, res) => {
   const { admin_id } = req.query;
 
   if (!admin_id) {
@@ -54,7 +53,7 @@ module.exports.setGet = async (req, res) => {
     res.status(500).send("Erreur serveur");
   }
 };
-module.exports.setMe = async (req, res) => {
+module.exports.getMe = async (req, res) => {
   try {
     const result = await client.query(
       `SELECT 

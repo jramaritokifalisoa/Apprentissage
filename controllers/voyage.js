@@ -1,7 +1,7 @@
 const express = require("express");
 const client = require("../config/db");
 
-module.exports.setGetV = async (req, res) => {
+module.exports.getPost = async (req, res) => {
   try {
     const result = await client.query("SELECT * FROM voyages ORDER BY id ASC");
     res.json(result.rows);
@@ -9,7 +9,7 @@ module.exports.setGetV = async (req, res) => {
     res.status(500).send("Erreur serveur");
   }
 };
-module.exports.setPostV = async (req, res) => {
+module.exports.setPost = async (req, res) => {
   try {
     const { destination, prix, admin_id } = req.body;
     if (destination == null || prix == null || admin_id == null) {
@@ -43,7 +43,7 @@ module.exports.setPostV = async (req, res) => {
     });
   }
 };
-module.exports.setGetI = async (req, res) => {
+module.exports.getPostI = async (req, res) => {
   try {
     const id = parseInt(req.params.id);
 
@@ -60,7 +60,7 @@ module.exports.setGetI = async (req, res) => {
     res.status(500).send("Erreur serveur");
   }
 };
-module.exports.setPutI = async (req, res) => {
+module.exports.editPost = async (req, res) => {
   const { destination, prix, admin_id } = req.body;
 
   if (!destination || !prix || !admin_id) {
@@ -87,7 +87,7 @@ module.exports.setPutI = async (req, res) => {
     res.status(500).send("Erreur serveur");
   }
 };
-module.exports.setDeleteI = async (req, res) => {
+module.exports.deletePost = async (req, res) => {
   const { admin_id } = req.body;
 
   if (!admin_id) {
