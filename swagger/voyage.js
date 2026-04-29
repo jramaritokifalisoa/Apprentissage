@@ -11,28 +11,49 @@ module.exports = {
       },
     },
     post: {
-      summary: "Creer un voyage",
+      summary: "Créer un voyage",
       requestBody: {
         required: true,
         content: {
           "application/json": {
             schema: {
               type: "object",
+              required: ["destination", "prix", "admin_id"],
               properties: {
                 destination: {
                   type: "string",
+                  example: "Antananarivo",
                 },
                 prix: {
                   type: "number",
+                  example: 200,
+                },
+                admin_id: {
+                  type: "number",
+                  example: 1,
+                  description: "ID de l'admin créateur",
                 },
               },
             },
           },
         },
       },
+
       responses: {
-        200: {
-          description: "Contact creer",
+        201: {
+          description: "Voyage créé avec succès",
+        },
+
+        400: {
+          description: "Données manquantes ou invalides",
+        },
+
+        404: {
+          description: "Admin introuvable",
+        },
+
+        500: {
+          description: "Erreur serveur",
         },
       },
     },
@@ -70,42 +91,55 @@ module.exports = {
           schema: {
             type: "number",
           },
-          description: "ID du voyage",
+          description: "ID du voyage à modifier",
         },
       ],
+
       requestBody: {
         required: true,
         content: {
           "application/json": {
             schema: {
               type: "object",
-              required: ["destination", "prix"],
+              required: ["destination", "prix", "admin_id"],
               properties: {
                 destination: {
                   type: "string",
+                  example: "Antananarivo",
                 },
                 prix: {
                   type: "number",
+                },
+                admin_id: {
+                  type: "number",
+                  description: "ID de l'admin qui tente la modification",
                 },
               },
             },
           },
         },
       },
+
       responses: {
         200: {
           description: "Voyage modifié avec succès",
         },
-        404: {
-          description: "Voyage introuvable",
-        },
+
         400: {
-          description: "Données invalides",
+          description: "Données manquantes",
+        },
+
+        403: {
+          description: "Non autorisé ou voyage inexistant",
+        },
+
+        500: {
+          description: "Erreur serveur",
         },
       },
     },
     delete: {
-      summary: "Suprimer un voyage",
+      summary: "Supprimer un voyage",
       parameters: [
         {
           name: "id",
@@ -114,18 +148,47 @@ module.exports = {
           schema: {
             type: "number",
           },
-          description: "ID du voyage",
+          description: "ID du voyage à supprimer",
         },
       ],
+
+      requestBody: {
+        required: true,
+        content: {
+          "application/json": {
+            schema: {
+              type: "object",
+              required: ["admin_id"],
+              properties: {
+                admin_id: {
+                  type: "number",
+                  description: "ID de l'admin qui veut supprimer le voyage",
+                },
+              },
+            },
+          },
+        },
+      },
+
       responses: {
         200: {
-          description: "Voyage suprimer avec succès",
+          description: "Voyage supprimé avec succès",
         },
+
+        400: {
+          description: "Données manquantes ou invalides",
+        },
+
+        403: {
+          description: "Non autorisé ou voyage inexistant",
+        },
+
         404: {
           description: "Voyage introuvable",
         },
-        400: {
-          description: "Données invalides",
+
+        500: {
+          description: "Erreur serveur",
         },
       },
     },

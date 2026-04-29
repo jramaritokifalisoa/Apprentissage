@@ -1,13 +1,7 @@
 const express = require("express");
-const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
-const client = require("../db");
+const client = require("../config/db");
 
-const router = express.Router();
-
-const SECRET_KEY = "mon_secret_jwt";
-
-router.post("/register", async (req, res) => {
+module.exports.setRegister = async (req, res) => {
   const { name, password } = req.body;
 
   if (!name || !password) {
@@ -15,7 +9,7 @@ router.post("/register", async (req, res) => {
   }
 
   try {
-    const check = await client.query("SELECT * FROM express WHERE name = $1", [
+    const check = await client.query("SELECT * FROM users WHERE name = $1", [
       name,
     ]);
 
@@ -25,7 +19,7 @@ router.post("/register", async (req, res) => {
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    await client.query("INSERT INTO express(name, password) VALUES($1,$2)", [
+    await client.query("INSERT INTO users(name, password) VALUES($1,$2)", [
       name,
       hashedPassword,
     ]);
@@ -35,16 +29,16 @@ router.post("/register", async (req, res) => {
     console.log(error);
     res.send("Erreur serveur");
   }
-});
+};
 
-router.get("/me", async (req, res) => {
+module.exports.setMe = async (req, res) => {
   const { name } = req.query;
   if (!name) {
     return res.send("Nom manquant");
   }
   try {
     const result = await client.query(
-      "SELECT id, name FROM express WHERE name = $1",
+      "SELECT id, name FROM users WHERE name = $1",
       [name],
     );
     if (result.rows.length === 0) {
@@ -55,9 +49,9 @@ router.get("/me", async (req, res) => {
     console.log(error);
     res.send("Erreur serveur");
   }
-});
+};
 
-router.post("/login", async (req, res) => {
+module.exports.setLogin = async (req, res) => {
   const { name, password } = req.body;
 
   if (!name || !password) {
@@ -65,7 +59,7 @@ router.post("/login", async (req, res) => {
   }
 
   try {
-    const result = await client.query("SELECT * FROM express WHERE name = $1", [
+    const result = await client.query("SELECT * FROM users WHERE name = $1", [
       name,
     ]);
 
@@ -98,39 +92,4 @@ router.post("/login", async (req, res) => {
     console.log(error);
     res.send("Erreur serveur");
   }
-});
-
-router.get("/me", verifyToken, async (req, res) => {
-  try {
-    const result = await client.query(
-      "SELECT id, name FROM express WHERE id = $1",
-      [req.user.id],
-    );
-
-    res.json(result.rows[0]);
-  } catch (error) {
-    console.log(error);
-    res.send("Erreur serveur");
-  }
-});
-
-function verifyToken(req, res, next) {
-  const header = req.headers.authorization;
-
-  if (!header) {
-    return res.send("Token manquant");
-  }
-
-  const token = header.split(" ")[1];
-
-  jwt.verify(token, SECRET_KEY, (err, decoded) => {
-    if (err) {
-      return res.send("Token invalide");
-    }
-
-    req.user = decoded;
-    next();
-  });
-}
-
-module.exports = router;
+};

@@ -1,5 +1,6 @@
-const authPaths = require("./modeles/Authswagger");
-const voyagePaths = require("./modeles/voyageswagger");
+const authPaths = require("./auth");
+const voyagePaths = require("./voyage");
+const reservationPaths = require("./reservation");
 module.exports = {
   openapi: "3.0.0",
   info: {
@@ -15,5 +16,6 @@ module.exports = {
   paths: {
     ...authPaths,
     ...voyagePaths,
+    ...reservationPaths,
   },
 };
