@@ -1,12 +1,12 @@
 const express = require("express");
-const client = require("../config/db");
+const client = require("../db");
 const {
   getPost,
   setPost,
   getPostI,
   editPost,
   deletePost,
-} = require("../controllers/voyage");
+} = require("../services/voyage");
 const router = express.Router();
 router.route("/api/voyages").get(getPost).post(setPost);
 

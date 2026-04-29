@@ -15,6 +15,9 @@ module.exports = {
                 password: {
                   type: "string",
                 },
+                confirmPassword: {
+                  type: "string",
+                },
               },
             },
           },

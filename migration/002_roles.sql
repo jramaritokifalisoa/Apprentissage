@@ -1,0 +1,5 @@
+CREATE TABLE IF NOT EXISTS role (
+  id SERIAL PRIMARY KEY,
+  user_id INTEGER,
+  admin_id INTEGER
+);

@@ -1,7 +1,6 @@
 const express = require("express");
 const swaggerUi = require("swagger-ui-express");
 const swaggerDocument = require("./swagger/index.js");
-
 const authRoutes = require("./routes/auth.js");
 const apivoyage = require("./routes/voyage.js");
 const apireservation = require("./routes/reservation.js");

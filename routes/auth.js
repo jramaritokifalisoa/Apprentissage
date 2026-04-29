@@ -1,8 +1,8 @@
 const express = require("express");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const client = require("../config/db");
-const { setPost, getPost, setLogin } = require("../controllers/auth");
+const client = require("../db");
+const { setPost, getPost, setLogin } = require("../services/auth");
 const router = express.Router();
 
 const SECRET_KEY = "mon_secret_jwt";
