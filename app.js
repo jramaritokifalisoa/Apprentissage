@@ -6,7 +6,14 @@ const apivoyage = require("./routes/voyage.js");
 const apireservation = require("./routes/reservation.js");
 const app = express();
 const port = 5020;
-
+const cors = require("cors");
+app.use(
+  cors({
+    origin: "*", // Ou l'URL de ton Swagger
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"], // <--- CRUCIAL
+  }),
+);
 app.use(express.json());
 
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));

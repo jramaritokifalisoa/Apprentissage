@@ -3,33 +3,55 @@ const client = require("../db");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
-const SECRET_KEY = process.env.SECRET_KEY;
-const { addUsers, getName, getId } = require("../controllers/auth");
+
+const {
+  addUsers,
+  getName,
+  getId,
+  checkUser,
+  AddRole,
+  AddUser,
+} = require("../controllers/auth");
 module.exports.setPost = async (req, res) => {
-  const { name, password, confirmPassword } = req.body;
+  const { name, password, confirmPassword, adminCode } = req.body;
 
   if (!name || !password || !confirmPassword) {
     return res.status(400).send("Erreur de validation");
   }
-  if (password != confirmPassword) {
+  if (password !== confirmPassword) {
     return res.status(400).send("Erreur avec password ou confimPassword");
   }
   try {
+    // 2. Vérification existence
     const check = await getName(name);
+    if (check.rows.length > 0)
+      return res.status(400).send("Utilisateur déjà existant");
 
-    if (check.rows.length > 0) {
-      return res.send("Utilisateur déjà existant");
-    }
+    // 3. Détermination du rôle
+    const userCount = await checkUser();
+    const role = parseInt(userCount.rows[0].count) === 0 ? "admin" : "user";
 
     const hashedPassword = await bcrypt.hash(password, 10);
     const hashedConfirmPassword = await bcrypt.hash(confirmPassword, 10);
 
-    await addUsers(name, hashedPassword, hashedConfirmPassword);
+    const newUser = await addUsers(
+      name,
+      hashedPassword,
+      hashedConfirmPassword,
+      role,
+    );
+    const newId = newUser[0].name;
 
-    res.send("Register success");
+    if (role === "admin") {
+      await AddRole(newId);
+    } else {
+      await AddUser(newId);
+    }
+
+    res.status(201).send(`Inscription réussie en tant que ${role}`);
   } catch (error) {
     console.log(error);
-    res.send("Erreur serveur");
+    res.status(500).send("Erreur serveur");
   }
 };
 
@@ -76,8 +98,9 @@ module.exports.setLogin = async (req, res) => {
       {
         id: user.id,
         name: user.name,
+        role: user.role.name || user.role,
       },
-      SECRET_KEY,
+      process.env.SECRET_KEY,
       { expiresIn: "1h" },
     );
 
@@ -90,3 +113,6 @@ module.exports.setLogin = async (req, res) => {
     res.send("Erreur serveur");
   }
 };
+/*module.exports.getAdmin = async (req, res) => {
+  res.send(`Bienvenue Admin ${req.user.name}, voici les données secrètes.`);
+};*/

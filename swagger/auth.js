@@ -63,6 +63,7 @@ module.exports = {
   "/me": {
     get: {
       summary: "Voir profil par nom",
+      security: [{ bearerAuth: [] }],
       parameters: [
         {
           name: "name",
@@ -79,6 +80,13 @@ module.exports = {
           description: "Profil utilisateur trouvé",
         },
       },
+    },
+  },
+  "/admin-dashboard": {
+    get: {
+      summary: "Dashboard Admin",
+      security: [{ bearerAuth: [] }], // <--- AUSSI ICI
+      responses: { 200: { description: "Succès" } },
     },
   },
 };

@@ -3,5 +3,7 @@ CREATE TABLE IF NOT EXISTS users (
   name VARCHAR(50) UNIQUE NOT NULL,
   password TEXT NOT NULL,
   confirmPassword TEXT NOT NULL,
+  role VARCHAR(20) NOT NULL DEFAULT 'user'
+    CHECK (role IN ('user', 'admin')),
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
