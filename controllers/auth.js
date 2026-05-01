@@ -39,7 +39,7 @@ module.exports.AddRole = async (newId) => {
 module.exports.AddUser = async (newId) => {
   const result = await client.query(
     "INSERT INTO roles(admin_id, user_id) VALUES($1, $2)",
-    ["N/A", newId],
+    [null, newId],
   );
   return result.rows;
 };

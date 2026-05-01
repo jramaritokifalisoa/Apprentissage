@@ -1,4 +1,4 @@
-const { getUsers, detailUsers } = require("../controllers/users");
+const { getUsers, detailUsers, remove } = require("../controllers/users");
 module.exports.Users = async (req, res) => {
   try {
     if (!req.user) {
@@ -39,5 +39,21 @@ module.exports.details = async (req, res) => {
   } catch (err) {
     console.log(err);
     res.status(404).send({ message: "Erreur serveur!" });
+  }
+};
+module.exports.remove = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const result = await remove(id);
+
+    if (result.rowCount === 0) {
+      return res.status(404).json({ message: "Utilisateur non trouvé" });
+    }
+
+    res.status(200).json({ message: "Utilisateur et ses données supprimés" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Erreur lors de la suppression complète");
   }
 };
