@@ -49,19 +49,7 @@ module.exports = {
       },
     },
     get: {
-      summary: "Liste des réservations de l'admin",
-      parameters: [
-        {
-          name: "admin_id",
-          in: "query",
-          required: true,
-          schema: {
-            type: "number",
-          },
-          description: "ID de l'admin pour filtrer les réservations",
-        },
-      ],
-
+      summary: "Liste des réservations",
       responses: {
         200: {
           description: "Liste des réservations récupérée",
@@ -79,10 +67,36 @@ module.exports = {
   },
   "/api/reservations/me": {
     get: {
-      summary: "Liste de toutes les réservations",
+      summary: "Historique de toutes les réservations utilisateur",
       responses: {
         200: {
           description: "Liste des réservations récupérée avec succès",
+        },
+
+        500: {
+          description: "Erreur serveur",
+        },
+      },
+    },
+  },
+  "/api/reservations/{id}": {
+    delete: {
+      summary: "Annuler une reservation",
+      parameters: [
+        {
+          name: "id",
+          in: "path",
+          required: true,
+          schema: {
+            type: "number",
+          },
+          description: "ID du reservation à annuler",
+        },
+      ],
+
+      responses: {
+        200: {
+          description: "Reservation annuler avec succès",
         },
 
         500: {

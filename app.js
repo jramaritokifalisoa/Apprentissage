@@ -10,7 +10,7 @@ const cors = require("cors");
 app.use(
   cors({
     origin: "*", // Ou l'URL de ton Swagger
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"], // <--- CRUCIAL
   }),
 );
