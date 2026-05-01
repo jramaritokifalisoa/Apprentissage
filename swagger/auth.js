@@ -82,11 +82,11 @@ module.exports = {
       },
     },
   },
-  "/admin-dashboard": {
+  /*"/admin-dashboard": {
     get: {
       summary: "Dashboard Admin",
       security: [{ bearerAuth: [] }], // <--- AUSSI ICI
       responses: { 200: { description: "Succès" } },
     },
-  },
+  },*/
 };

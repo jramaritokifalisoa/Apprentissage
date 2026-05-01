@@ -7,13 +7,14 @@ const {
   editPost,
   deletePost,
 } = require("../services/voyage");
+const { verifyToken, isAdmin } = require("../middleware/index");
 const router = express.Router();
-router.route("/api/voyages").get(getPost).post(setPost);
+router.route("/api/voyages").get(getPost).post(verifyToken, isAdmin, setPost);
 
 router
   .route("/api/voyages/:id")
   .get(getPostI)
 
-  .put(editPost)
-  .delete(deletePost);
+  .put(verifyToken, isAdmin, editPost)
+  .delete(verifyToken, isAdmin, deletePost);
 module.exports = router;

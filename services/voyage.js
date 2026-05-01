@@ -5,7 +5,7 @@ const {
   getId,
   Addvoyage,
   selectId,
-  CheckId,
+  updateVoyage,
   IdCheck,
   removeVoyage,
 } = require("../controllers/voyage");
@@ -19,31 +19,41 @@ module.exports.getPost = async (req, res) => {
 };
 module.exports.setPost = async (req, res) => {
   try {
-    const { destination, prix, admin_id } = req.body;
-    if (destination == null || prix == null || admin_id == null) {
-      res.status(400).json({
-        message: "Données manquantes",
+    const { destination, prix, Nombre_place } = req.body;
+
+    if (!req.user) {
+      return res
+        .status(401)
+        .json({ message: "Utilisateur non authentifié (req.user est vide)" });
+    }
+    const userId = req.user.id;
+    const userRole =
+      typeof req.user.role === "object" ? req.user.role.name : req.user.role;
+
+    if (!destination || !prix || !Nombre_place) {
+      return res.status(400).json({ message: "Données manquantes" });
+    }
+
+    const userCheck = await getId(userId);
+
+    if (userCheck.rows.length === 0) {
+      return res.status(404).json({ message: "Utilisateur introuvable" });
+    }
+    if (userRole !== "admin" && userRole !== "SuperAdmin") {
+      return res.status(403).json({
+        message: "Accès refusé : Seuls les admins peuvent créer des voyages",
       });
     }
 
-    const user = await getId(admin_id);
-
-    if (user.rows.length === 0) {
-      res.status(404).json({
-        message: "Admin introuvable",
-      });
-    }
-    const result = await Addvoyage(destination, prix, admin_id);
+    const result = await Addvoyage(destination, prix, Nombre_place);
 
     return res.status(201).json({
       message: "Voyage créé avec succès",
       data: result.rows[0],
     });
   } catch (error) {
-    console.log(error);
-    return res.status(500).json({
-      message: "Erreur serveur",
-    });
+    console.error(error);
+    return res.status(500).json({ message: "Erreur serveur" });
   }
 };
 module.exports.getPostI = async (req, res) => {
@@ -62,47 +72,64 @@ module.exports.getPostI = async (req, res) => {
   }
 };
 module.exports.editPost = async (req, res) => {
-  const { destination, prix, admin_id } = req.body;
-
-  if (!destination || !prix || !admin_id) {
-    return res.status(400).send("Données manquantes");
-  }
-
   try {
-    const check = await CheckId(admin_id);
+    const { destination, prix, Nombre_place } = req.body;
+    const { id } = req.params;
 
-    if (check.rows.length === 0) {
-      return res.status(403).send("Non autorisé ou voyage inexistant");
+    const userRole =
+      typeof req.user.role === "object" ? req.user.role.name : req.user.role;
+
+    if (!destination || !prix || !Nombre_place) {
+      return res.status(400).json({ message: "Données manquantes" });
     }
 
-    const result = await updateVoyage(destination, prix, admin_id);
+    if (userRole !== "admin" && userRole !== "SuperAdmin") {
+      return res.status(403).json({
+        message: "Accès refusé : Seuls les admins peuvent modifier des voyages",
+      });
+    }
 
-    res.json(result.rows[0]);
+    const result = await updateVoyage(id, destination, prix, Nombre_place);
+
+    if (result.rowCount === 0) {
+      return res.status(404).json({ message: "Voyage inexistant" });
+    }
+
+    return res.status(200).json({
+      message: "Voyage mis à jour avec succès",
+      data: result.rows[0],
+    });
   } catch (error) {
-    res.status(500).send("Erreur serveur");
+    console.error(error);
+    return res.status(500).json({ message: "Erreur serveur" });
   }
 };
 module.exports.deletePost = async (req, res) => {
-  const { admin_id } = req.body;
-
-  if (!admin_id) {
-    return res.status(400).send("Données manquantes");
-  }
-
   try {
-    const id = parseInt(req.params.id);
+    const { id } = req.params;
 
-    const check = await IdCheck(id, admin_id);
+    const userRole =
+      typeof req.user.role === "object" ? req.user.role.name : req.user.role;
 
-    if (check.rows.length === 0) {
-      return res.status(403).send("Non autorisé ou voyage inexistant");
+    if (userRole !== "admin" && userRole !== "SuperAdmin") {
+      return res.status(403).json({
+        message:
+          "Accès refusé : Seuls les admins peuvent supprimer des voyages",
+      });
     }
 
-    const resultSup = await removeVoyage(id, admin_id);
+    const resultSup = await removeVoyage(id);
 
-    res.json(resultSup.rows[0]);
+    if (resultSup.rowCount === 0) {
+      return res.status(404).json({ message: "Voyage inexistant" });
+    }
+
+    return res.status(200).json({
+      message: "Voyage supprimé avec succès",
+      data: resultSup.rows[0],
+    });
   } catch (error) {
-    console.log(error);
-    res.status(500).send("Erreur serveur");
+    console.error(error);
+    return res.status(500).json({ message: "Erreur serveur" });
   }
 };

@@ -20,7 +20,7 @@ module.exports.addUsers = async (
 };
 module.exports.getId = async (name) => {
   const result = await client.query(
-    "SELECT id, name FROM users WHERE name = $1",
+    `SELECT id, name, "role" FROM users WHERE name = $1`,
     [name],
   );
   return result;

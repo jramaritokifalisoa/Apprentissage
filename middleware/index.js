@@ -1,23 +1,22 @@
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
 module.exports.isAdmin = (req, res, next) => {
-  console.log("Rôle de l'utilisateur :", req.user.role);
+  if (!req.user) {
+    return res.status(401).json({ message: "Authentification requise" });
+  }
 
-  // On vérifie si c'est un objet (comme dans ton log) ou une string
-  const roleName =
+  const role =
     typeof req.user.role === "object" ? req.user.role.name : req.user.role;
+  console.log("DEBUG ROLE DANS MIDDLEWARE :", role);
 
-  // Attention : Ton log affiche "SuperAdmin", pas "admin"
-  if (req.user && (roleName === "admin" || roleName === "SuperAdmin")) {
+  if (role === "admin" || role === "SuperAdmin") {
     next();
   } else {
-    res.status(403).json({
-      error: "Accès refusé",
-      message: `Requis: admin, Reçu: ${roleName}`,
+    return res.status(403).json({
+      message: `Accès refusé : Seuls les admins sont autorisés.`,
     });
   }
 };
-
 module.exports.verifyToken = (req, res, next) => {
   const header = req.headers.authorization;
 

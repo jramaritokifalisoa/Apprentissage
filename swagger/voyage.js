@@ -28,10 +28,9 @@ module.exports = {
                   type: "number",
                   example: 200,
                 },
-                admin_id: {
+                Nombre_place: {
                   type: "number",
-                  example: 1,
-                  description: "ID de l'admin créateur",
+                  example: "16 max",
                 },
               },
             },
@@ -110,9 +109,8 @@ module.exports = {
                 prix: {
                   type: "number",
                 },
-                admin_id: {
+                Nombre_place: {
                   type: "number",
-                  description: "ID de l'admin qui tente la modification",
                 },
               },
             },
@@ -151,24 +149,6 @@ module.exports = {
           description: "ID du voyage à supprimer",
         },
       ],
-
-      requestBody: {
-        required: true,
-        content: {
-          "application/json": {
-            schema: {
-              type: "object",
-              required: ["admin_id"],
-              properties: {
-                admin_id: {
-                  type: "number",
-                  description: "ID de l'admin qui veut supprimer le voyage",
-                },
-              },
-            },
-          },
-        },
-      },
 
       responses: {
         200: {
