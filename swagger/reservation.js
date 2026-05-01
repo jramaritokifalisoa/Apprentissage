@@ -11,10 +11,6 @@ module.exports = {
               type: "object",
               required: ["voyage_id", "nom", "places"],
               properties: {
-                admin_id: {
-                  type: "number",
-                  description: "ID de l'admin",
-                },
                 voyage_id: {
                   type: "number",
                   description: "ID du voyage",

@@ -1,13 +1,10 @@
 const express = require("express");
 const client = require("../db");
 
-module.exports.getId = async (voyage_id, admin_id) => {
-  const result = await client.query(
-    "SELECT * FROM voyages WHERE id = $1 AND admin_id = $2",
-    [voyage_id, admin_id],
-  );
-  return result;
+module.exports.getVoyageById = async (id) => {
+  return await client.query("SELECT * FROM voyages WHERE id = $1", [id]);
 };
+
 module.exports.addReservation = async (voyage_id, nom, places) => {
   const result = await client.query(
     "INSERT INTO reservations(voyage_id, nom, places) VALUES($1, $2, $3) RETURNING *",

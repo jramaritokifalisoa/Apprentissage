@@ -1,34 +1,49 @@
 const express = require("express");
 const client = require("../db");
 const {
-  getId,
+  getVoyageById,
   addReservation,
   setAdmin,
   getAll,
 } = require("../controllers/reservation");
 module.exports.setPost = async (req, res) => {
   try {
-    const { voyage_id, nom, places, admin_id } = req.body;
+    const { voyage_id, places } = req.body;
 
-    if (voyage_id == null || !nom || places == null || !admin_id) {
-      return res.status(400).send("Données manquantes");
+    const nomClient = req.user.name;
+
+    if (!voyage_id || !places) {
+      return res
+        .status(400)
+        .json({ message: "Données manquantes (ID voyage ou places)" });
     }
 
-    const voyageResult = await getId(voyage_id, admin_id);
+    const voyageCheck = await getVoyageById(voyage_id);
 
-    if (voyageResult.rows.length === 0) {
-      return res.status(403).send("Non autorisé ou voyage inexistant");
+    if (voyageCheck.rows.length === 0) {
+      return res
+        .status(404)
+        .json({ message: "Le voyage que vous voulez réserver n'existe pas" });
     }
 
-    const reservationResult = await addReservation(voyage_id, nom, places);
+    // 3. Création de la réservation
+    const reservationResult = await addReservation(
+      voyage_id,
+      nomClient,
+      places,
+    );
 
-    res.status(201).json(reservationResult.rows[0]);
+    return res.status(201).json({
+      message: "Réservation effectuée avec succès",
+      data: reservationResult.rows[0],
+    });
   } catch (error) {
-    console.log(error);
-    res.status(500).send("Erreur serveur");
+    console.error(error);
+    return res
+      .status(500)
+      .json({ message: "Erreur serveur lors de la réservation" });
   }
 };
-
 module.exports.getPost = async (req, res) => {
   const { admin_id } = req.query;
 
