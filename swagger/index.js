@@ -1,5 +1,6 @@
 const authPaths = require("./auth");
 const voyagePaths = require("./voyage");
+const UsersPath = require("./users");
 const reservationPaths = require("./reservation");
 module.exports = {
   openapi: "3.0.0",
@@ -17,6 +18,7 @@ module.exports = {
     ...authPaths,
     ...voyagePaths,
     ...reservationPaths,
+    ...UsersPath,
   },
   components: {
     securitySchemes: {
