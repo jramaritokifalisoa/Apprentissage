@@ -9,127 +9,101 @@ const {
   IdCheck,
   removeVoyage,
 } = require("../repository/voyage");
-module.exports.getPost = async (req, res) => {
-  try {
-    const result = await getAllvoyage();
-    res.json(result);
-  } catch (error) {
-    res.status(500).send("Erreur serveur");
-  }
+module.exports.getPost = async () => {
+  const result = await getAllvoyage();
+  return result;
 };
-module.exports.setPost = async (req, res) => {
-  try {
-    const { destination, prix, Nombre_place } = req.body;
+module.exports.setPost = async (data, user) => {
+  const { destination, prix, Nombre_place } = data;
 
-    if (!req.user) {
-      return res
-        .status(401)
-        .json({ message: "Utilisateur non authentifié (req.user est vide)" });
-    }
-    const userId = req.user.id;
-    const userRole =
-      typeof req.user.role === "object" ? req.user.role.name : req.user.role;
-
-    if (!destination || !prix || !Nombre_place) {
-      return res.status(400).json({ message: "Données manquantes" });
-    }
-
-    const userCheck = await getId(userId);
-
-    if (userCheck.rows.length === 0) {
-      return res.status(404).json({ message: "Utilisateur introuvable" });
-    }
-    if (userRole !== "admin" && userRole !== "SuperAdmin") {
-      return res.status(403).json({
-        message: "Accès refusé : Seuls les admins peuvent créer des voyages",
-      });
-    }
-
-    const result = await Addvoyage(destination, prix, Nombre_place);
-
-    return res.status(201).json({
-      message: "Voyage créé avec succès",
-      data: result.rows[0],
-    });
-  } catch (error) {
-    console.error(error);
-    return res.status(500).json({ message: "Erreur serveur" });
+  if (!user) {
+    throw new Error("Utilisateur non authentifié");
   }
+  const userId = user.id;
+  const userRole = typeof user.role === "object" ? user.role.name : user.role;
+
+  if (!destination || !prix || !Nombre_place) {
+    throw new Error("Données manquantes");
+  }
+
+  const userCheck = await getId(userId);
+
+  if (userCheck.rows.length === 0) {
+    throw new Error("Utilisateur introuvable");
+  }
+  if (userRole !== "admin" && userRole !== "SuperAdmin") {
+    throw new Error(
+      "Accès refusé : Seuls les admins peuvent créer des voyages",
+    );
+  }
+
+  const result = await Addvoyage(destination, prix, Nombre_place);
+
+  return {
+    message: "Voyage créé avec succès",
+    data: result.rows[0],
+  };
 };
-module.exports.getPostI = async (req, res) => {
-  try {
-    const id = parseInt(req.params.id);
+module.exports.getPostI = async (data) => {
+  const id = parseInt(data);
 
-    const result = await selectId(id);
+  const result = await selectId(id);
 
-    if (result.rows.length === 0) {
-      return res.status(404).send("Id inexistant");
-    }
-
-    res.json(result.rows[0]);
-  } catch (error) {
-    res.status(500).send("Erreur serveur");
+  if (result.rows.length === 0) {
+    throw new Error("Id inexistant");
   }
+  return {
+    message: "Resultat des voyages rechercher",
+    data: result.rows[0],
+  };
 };
-module.exports.editPost = async (req, res) => {
-  try {
-    const { destination, prix, Nombre_place } = req.body;
-    const { id } = req.params;
+module.exports.editPost = async (data, user) => {
+  const { destination, prix, Nombre_place } = data;
+  const { id } = data;
 
-    const userRole =
-      typeof req.user.role === "object" ? req.user.role.name : req.user.role;
+  const userRole = typeof user.role === "object" ? user.role.name : user.role;
 
-    if (!destination || !prix || !Nombre_place) {
-      return res.status(400).json({ message: "Données manquantes" });
-    }
-
-    if (userRole !== "admin" && userRole !== "SuperAdmin") {
-      return res.status(403).json({
-        message: "Accès refusé : Seuls les admins peuvent modifier des voyages",
-      });
-    }
-
-    const result = await updateVoyage(id, destination, prix, Nombre_place);
-
-    if (result.rowCount === 0) {
-      return res.status(404).json({ message: "Voyage inexistant" });
-    }
-
-    return res.status(200).json({
-      message: "Voyage mis à jour avec succès",
-      data: result.rows[0],
-    });
-  } catch (error) {
-    console.error(error);
-    return res.status(500).json({ message: "Erreur serveur" });
+  console.log("DEBUG ROLE DANS SERVICE :", userRole);
+  if (!destination || !prix || !Nombre_place) {
+    throw new Error("Données manquantes");
   }
+
+  if (userRole !== "admin" && userRole !== "SuperAdmin") {
+    throw new Error(
+      "Accès refusé : Seuls les admins peuvent modifier des voyages",
+    );
+  }
+
+  const result = await updateVoyage(id, destination, prix, Nombre_place);
+
+  if (result.rowCount === 0) {
+    throw new Error("Voyage inexistant");
+  }
+
+  return {
+    message: "Voyage mis à jour avec succès",
+    data: result.rows[0],
+  };
 };
-module.exports.deletePost = async (req, res) => {
-  try {
-    const { id } = req.params;
+module.exports.deletes = async (data, user) => {
+  const { id } = data;
 
-    const userRole =
-      typeof req.user.role === "object" ? req.user.role.name : req.user.role;
+  const userRole = typeof user.role === "object" ? user.role.name : user.role;
 
-    if (userRole !== "admin" && userRole !== "SuperAdmin") {
-      return res.status(403).json({
-        message:
-          "Accès refusé : Seuls les admins peuvent supprimer des voyages",
-      });
-    }
-
-    const resultSup = await removeVoyage(id);
-
-    if (resultSup.rowCount === 0) {
-      return res.status(404).json({ message: "Voyage inexistant" });
-    }
-
-    return res.status(200).json({
-      message: "Voyage supprimé avec succès",
-      data: resultSup.rows[0],
-    });
-  } catch (error) {
-    console.error(error);
-    return res.status(500).json({ message: "Erreur serveur" });
+  if (userRole !== "admin" && userRole !== "SuperAdmin") {
+    throw new Error(
+      "Accès refusé : Seuls les admins peuvent supprimer des voyages",
+    );
   }
+
+  const resultSup = await removeVoyage(id);
+
+  if (resultSup.rowCount === 0) {
+    throw new Error("Voyage inexistant");
+  }
+
+  return {
+    message: "Voyage supprimé avec succès",
+    data: resultSup.rows[0],
+  };
 };

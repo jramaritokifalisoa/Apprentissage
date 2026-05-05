@@ -21,7 +21,6 @@ module.exports.getPosts = async (req, res) => {
 };
 module.exports.Login = async (req, res) => {
   try {
-    console.log("Données reçues dans le contrôleur:", req.body);
     const resultfinal = await setLogin(req.body);
     return res.status(200).send(resultfinal);
   } catch (err) {

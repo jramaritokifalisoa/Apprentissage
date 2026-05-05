@@ -71,7 +71,6 @@ module.exports.getPost = async (req) => {
 };
 
 module.exports.setLogin = async (data) => {
-  console.log("Données reçues dans le SERVICE:", data);
   const { name, password } = data;
 
   if (!name || !password) {
