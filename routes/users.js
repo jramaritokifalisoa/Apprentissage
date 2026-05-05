@@ -1,11 +1,12 @@
 const client = require("../db");
 const express = require("express");
-const { Users, details, remove } = require("../services/users");
+const { User, detail, removes } = require("../controllers/users");
+
 const { verifyToken, isAdmin } = require("../middleware/index");
 const router = express.Router();
-router.route("/api/users").get(verifyToken, isAdmin, Users);
+router.route("/api/users").get(verifyToken, isAdmin, User);
 router
   .route("/api/users/:id")
-  .get(verifyToken, isAdmin, details)
-  .delete(verifyToken, isAdmin, remove);
+  .get(verifyToken, isAdmin, detail)
+  .delete(verifyToken, isAdmin, removes);
 module.exports = router;
