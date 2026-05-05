@@ -46,7 +46,6 @@ module.exports.editPosts = async (req, res) => {
 };
 module.exports.remove = async (req, res) => {
   try {
-    //const voyageData = {id: req.params.id, ...req.body}
     const resultfinal = await deletes(req.params, req.user);
     res.status(200).send(resultfinal);
   } catch (err) {
