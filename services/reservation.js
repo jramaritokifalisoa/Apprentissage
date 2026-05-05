@@ -6,7 +6,7 @@ const {
   setAdmin,
   getAll,
   removeAll,
-} = require("../controllers/reservation");
+} = require("../repository/reservation");
 module.exports.setPost = async (req, res) => {
   try {
     const { voyage_id, places } = req.body;

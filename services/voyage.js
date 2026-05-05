@@ -8,7 +8,7 @@ const {
   updateVoyage,
   IdCheck,
   removeVoyage,
-} = require("../controllers/voyage");
+} = require("../repository/voyage");
 module.exports.getPost = async (req, res) => {
   try {
     const result = await getAllvoyage();

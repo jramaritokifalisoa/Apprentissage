@@ -1,4 +1,4 @@
-const { getUsers, detailUsers, remove } = require("../controllers/users");
+const { getUsers, detailUsers, remove } = require("../repository/users");
 module.exports.Users = async (req, res) => {
   try {
     if (!req.user) {
