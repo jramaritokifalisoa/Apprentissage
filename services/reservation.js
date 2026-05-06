@@ -15,13 +15,6 @@ module.exports.setPost = async (data, user) => {
   if (!voyage_id || !places) {
     throw new Error("Données manquantes (ID voyage ou places)");
   }
-  const userRole = typeof user.role === "object" ? user.role.name : user.role;
-
-  if (userRole == "admin" || userRole == "SuperAdmin") {
-    throw new Error(
-      "Accès refusé : Seuls les utilisateurs peuvent faire des réservations",
-    );
-  }
 
   const voyageCheck = await getVoyageById(voyage_id);
 
@@ -61,14 +54,6 @@ module.exports.getMe = async (user) => {
   if (!user) {
     throw new Error("Accès refusé ou Utilisateur non authentifié");
   }
-
-  const userRole = typeof user.role === "object" ? user.role.name : user.role;
-
-  if (userRole == "admin" || userRole == "SuperAdmin") {
-    throw new Error(
-      "Accès refusé : il faut avoir role user pour voir historique des reservations",
-    );
-  }
   const nomUtilisateur = user.name;
 
   const result = await getAll(nomUtilisateur);
@@ -84,14 +69,6 @@ module.exports.remove = async (data, user) => {
   if (!user) {
     throw new Error("Veuillez vous connecter !!");
   }
-
-  const userRole = typeof user.role === "object" ? user.role.name : user.role;
-  if (userRole == "admin" || userRole == "SuperAdmin") {
-    throw new Error(
-      "Accès refusé : il faut avoir role user pour voir historique des reservations",
-    );
-  }
-
   const nomUtilisateur = user.name;
 
   const resultRemove = await removeAll(id, nomUtilisateur);

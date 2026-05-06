@@ -5,8 +5,9 @@ module.exports.isAdmin = (req, res, next) => {
     return res.status(401).json({ message: "Authentification requise" });
   }
 
-  const role =
+  const roleRaw =
     typeof req.user.role === "object" ? req.user.role.name : req.user.role;
+  const role = roleRaw?.toLowerCase().trim();
   console.log("DEBUG ROLE DANS MIDDLEWARE :", role);
 
   if (role === "admin" || role === "SuperAdmin") {
