@@ -1,16 +1,16 @@
 const {
-  getAllvoyage,
-  getId,
+  getAllVoyage,
+  getVoyage,
   Addvoyage,
-  selectId,
+  chechId,
   updateVoyage,
   removeVoyage,
 } = require("../repository/voyage");
 module.exports.getPost = async () => {
-  const result = await getAllvoyage();
+  const result = await getAllVoyage();
   return result;
 };
-module.exports.setPost = async (data, user) => {
+module.exports.createVoyage = async (data, user) => {
   const { destination, prix, Nombre_place } = data;
 
   if (!user) {
@@ -23,7 +23,7 @@ module.exports.setPost = async (data, user) => {
     throw new Error("Données manquantes");
   }
 
-  const userCheck = await getId(userId);
+  const userCheck = await getVoyage(userId);
 
   if (userCheck.rows.length === 0) {
     throw new Error("Utilisateur introuvable");
@@ -41,10 +41,10 @@ module.exports.setPost = async (data, user) => {
     data: result.rows[0],
   };
 };
-module.exports.getPostI = async (data) => {
+module.exports.findVoyage = async (data) => {
   const id = parseInt(data);
 
-  const result = await selectId(id);
+  const result = await chechId(id);
 
   if (result.rows.length === 0) {
     throw new Error("Id inexistant");
@@ -54,7 +54,7 @@ module.exports.getPostI = async (data) => {
     data: result.rows[0],
   };
 };
-module.exports.editPost = async (data, user) => {
+module.exports.setUpdate = async (data, user) => {
   const { destination, prix, Nombre_place } = data;
   const { id } = data;
 
@@ -82,7 +82,7 @@ module.exports.editPost = async (data, user) => {
     data: result.rows[0],
   };
 };
-module.exports.deletes = async (data, user) => {
+module.exports.setRemove = async (data, user) => {
   const { id } = data;
 
   const userRole = typeof user.role === "object" ? user.role.name : user.role;

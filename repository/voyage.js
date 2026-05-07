@@ -1,10 +1,10 @@
 const db = require("../db");
 
-module.exports.getAllvoyage = async () => {
+module.exports.getAllVoyage = async () => {
   const result = await db.query("SELECT * FROM voyages ORDER BY id ASC");
   return result.rows;
 };
-module.exports.getId = async (id) => {
+module.exports.getVoyage = async (id) => {
   const result = await db.query(
     'SELECT id, name, "role" FROM users WHERE id = $1',
     [id],
@@ -18,7 +18,7 @@ module.exports.Addvoyage = async (destination, prix, Nombre_place) => {
   );
   return result;
 };
-module.exports.selectId = async (id) => {
+module.exports.chechId = async (id) => {
   const result = await db.query("SELECT * FROM voyages WHERE id = $1", [id]);
   return result;
 };
