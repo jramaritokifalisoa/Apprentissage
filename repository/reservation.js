@@ -1,19 +1,18 @@
-const express = require("express");
-const client = require("../db");
+const db = require("../db");
 
 module.exports.getVoyageById = async (id) => {
-  return await client.query("SELECT * FROM voyages WHERE id = $1", [id]);
+  return await db.query("SELECT * FROM voyages WHERE id = $1", [id]);
 };
 
 module.exports.addReservation = async (voyage_id, nom, places) => {
-  const result = await client.query(
+  const result = await db.query(
     "INSERT INTO reservations(voyage_id, nom, places) VALUES($1, $2, $3) RETURNING *",
     [voyage_id, nom, places],
   );
   return result;
 };
 module.exports.setAdmin = async () => {
-  const result = await client.query(
+  const result = await db.query(
     `SELECT r.*, v.destination 
        FROM reservations r
        JOIN voyages v ON r.voyage_id = v.id
@@ -22,7 +21,7 @@ module.exports.setAdmin = async () => {
   return result;
 };
 module.exports.getAll = async (nom) => {
-  const result = await client.query(
+  const result = await db.query(
     `SELECT 
         r.id,
         r.nom,
@@ -40,7 +39,7 @@ module.exports.getAll = async (nom) => {
   return result;
 };
 module.exports.removeAll = async (id, nom) => {
-  const result = await client.query(
+  const result = await db.query(
     "DELETE FROM reservations WHERE id = $1 AND nom = $2 RETURNING *",
     [id, nom],
   );

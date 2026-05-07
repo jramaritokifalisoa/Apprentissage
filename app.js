@@ -10,9 +10,9 @@ const port = 5020;
 const cors = require("cors");
 app.use(
   cors({
-    origin: "*", // Ou l'URL de ton Swagger
+    origin: "https://mon-site-web.com",
     methods: ["GET", "POST", "PUT", "DELETE"],
-    allowedHeaders: ["Content-Type", "Authorization"], // <--- CRUCIAL
+    allowedHeaders: ["Content-Type", "Authorization"],
   }),
 );
 app.use(express.json());

@@ -1,4 +1,3 @@
-const express = require("express");
 const { Users, details, remove } = require("../services/users");
 module.exports.User = async (req, res) => {
   try {

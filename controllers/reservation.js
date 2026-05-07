@@ -1,4 +1,3 @@
-const express = require("express");
 const { setPost, getPost, getMe, remove } = require("../services/reservation");
 module.exports.setPosts = async (req, res) => {
   try {

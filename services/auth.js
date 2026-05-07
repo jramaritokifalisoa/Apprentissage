@@ -1,5 +1,3 @@
-const express = require("express");
-const client = require("../db");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
@@ -19,7 +17,7 @@ module.exports.setPost = async (data) => {
     throw new Error("Erreur de validation");
   }
   if (password !== confirmPassword) {
-    throw new Error("Erreur avec password ou confimPassword");
+    throw new Error("Problème avec password ou confimPassword");
   }
 
   const check = await getName(name);
@@ -29,26 +27,14 @@ module.exports.setPost = async (data) => {
   const role = parseInt(userCount.rows[0].count) === 0 ? "admin" : "user";
 
   const hashedPassword = await bcrypt.hash(password, 10);
-  const hashedConfirmPassword = await bcrypt.hash(confirmPassword, 10);
 
-  const newUser = await addUsers(
-    name,
-    hashedPassword,
-    hashedConfirmPassword,
-    role,
-  );
-  const newId = newUser[0].name;
+  const newUser = await addUsers(name, hashedPassword, role);
 
-  if (role === "admin") {
-    await AddRole(newId);
-  } else {
-    await AddUser(newId);
-  }
   return {
     success: true,
     message: "Utilisateur créé avec succès",
     data: {
-      name: newId,
+      name: newUser,
       role: role,
     },
   };
@@ -61,7 +47,7 @@ module.exports.getPost = async (req) => {
   }
   const result = await getId(name);
   if (result.rows.length === 0) {
-    throw new Error("Utilisateur introuvable");
+    throw new Error("Identifiant invalide");
   }
   return {
     success: true,
@@ -106,6 +92,3 @@ module.exports.setLogin = async (data) => {
     token: token,
   };
 };
-/*module.exports.getAdmin = async (req, res) => {
-  res.send(`Bienvenue Admin ${req.user.name}, voici les données secrètes.`);
-};*/

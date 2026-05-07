@@ -1,12 +1,9 @@
-const express = require("express");
-const client = require("../db");
 const {
   getAllvoyage,
   getId,
   Addvoyage,
   selectId,
   updateVoyage,
-  IdCheck,
   removeVoyage,
 } = require("../repository/voyage");
 module.exports.getPost = async () => {

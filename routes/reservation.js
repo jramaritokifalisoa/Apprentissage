@@ -1,5 +1,4 @@
 const express = require("express");
-const client = require("../db");
 const router = express.Router();
 const { verifyToken, isAdmin } = require("../middleware/index");
 const {

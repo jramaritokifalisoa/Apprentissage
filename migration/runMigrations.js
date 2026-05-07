@@ -7,12 +7,7 @@ async function runMigrations() {
     // await client.connect();
     console.log("Connected to PostgreSQL");
 
-    const files = [
-      "001_users.sql",
-      "002_roles.sql",
-      "003_voyages.sql",
-      "004_reservations.sql",
-    ];
+    const files = ["001_users.sql", "002_voyages.sql", "003_reservations.sql"];
 
     for (const file of files) {
       const sql = fs.readFileSync(

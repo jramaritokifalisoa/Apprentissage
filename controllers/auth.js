@@ -1,4 +1,3 @@
-const express = require("express");
 const { setPost, getPost, setLogin } = require("../services/auth");
 
 module.exports.setPosts = async (req, res) => {

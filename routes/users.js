@@ -1,4 +1,3 @@
-const client = require("../db");
 const express = require("express");
 const { User, detail, removes } = require("../controllers/users");
 

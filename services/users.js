@@ -6,7 +6,7 @@ module.exports.Users = async (user) => {
 
   const userRole = typeof user.role === "object" ? user.role.name : user.role;
   if (userRole !== "admin" && userRole !== "SuperAdmin") {
-    return res.status(403).json({
+    throw new Error({
       message: "Accès refusé : seuls les admins peut voir les users",
     });
   }
