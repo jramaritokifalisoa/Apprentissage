@@ -6,7 +6,7 @@ const {
   showNewVoyage,
   voyageRemoved,
 } = require("../controllers/voyage");
-//const { deletePost } = require("../services/voyage");
+
 const { verifyToken, isAdmin } = require("../middleware/index");
 const router = express.Router();
 router

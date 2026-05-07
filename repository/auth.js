@@ -1,5 +1,5 @@
 const db = require("../db");
-module.exports.getName = async (name) => {
+module.exports.getUsers = async (name) => {
   const result = await db.query("SELECT * FROM users WHERE name = $1", [name]);
   return result;
 };
@@ -11,12 +11,12 @@ module.exports.addUsers = async (name, hashedPassword, role = "user") => {
   return result.rows;
 };
 
-module.exports.getId = async (name) => {
+module.exports.findName = async (name) => {
   const query = `SELECT id, name, role FROM users WHERE name = $1`;
   const result = await db.query(query, [name]);
   return result;
 };
-module.exports.checkUser = async () => {
+module.exports.checkUsers = async () => {
   const result = await db.query("SELECT COUNT(*) FROM users");
   return result;
 };

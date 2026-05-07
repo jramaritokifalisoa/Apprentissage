@@ -4,26 +4,24 @@ require("dotenv").config();
 
 const {
   addUsers,
-  getName,
-  getId,
-  checkUser,
-  AddRole,
-  AddUser,
+  getUsers,
+  findName,
+  checkUsers,
 } = require("../repository/auth");
-module.exports.setRegister = async (data) => {
+module.exports.userRegister = async (data) => {
   const { name, password, confirmPassword } = data;
 
   if (!name || !password || !confirmPassword) {
     throw new Error("Erreur de validation");
   }
   if (password !== confirmPassword) {
-    throw new Error("Problème avec password ou confimPassword");
+    throw new Error("Problème avec votre password");
   }
 
-  const check = await getName(name);
+  const check = await getUsers(name);
   if (check.rows.length > 0) throw new Error("Utilisateur déjà existant");
 
-  const userCount = await checkUser();
+  const userCount = await checkUsers();
   const role = parseInt(userCount.rows[0].count) === 0 ? "admin" : "user";
 
   const hashedPassword = await bcrypt.hash(password, 10);
@@ -40,12 +38,12 @@ module.exports.setRegister = async (data) => {
   };
 };
 
-module.exports.setProfil = async (req) => {
+module.exports.userProfil = async (req) => {
   const { name } = req.query;
   if (!name) {
     throw new Error("Nom manquant");
   }
-  const result = await getId(name);
+  const result = await findName(name);
   if (result.rows.length === 0) {
     throw new Error("Identifiant invalide");
   }
@@ -56,14 +54,14 @@ module.exports.setProfil = async (req) => {
   };
 };
 
-module.exports.setLogin = async (data) => {
+module.exports.userLogin = async (data) => {
   const { name, password } = data;
 
   if (!name || !password) {
     throw new Error("Nom ou mot de passe manquant");
   }
 
-  const result = await getName(name);
+  const result = await getUsers(name);
 
   if (result.rows.length === 0) {
     throw new Error("Utilisateur introuvable");
