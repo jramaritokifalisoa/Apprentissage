@@ -2,16 +2,16 @@ const express = require("express");
 const router = express.Router();
 const { verifyToken, isAdmin } = require("../middleware/index");
 const {
-  setPosts,
-  getPosts,
-  getme,
-  removes,
+  showReservation,
+  showList,
+  showHistory,
+  showRemove,
 } = require("../controllers/reservation");
 
 router
   .route("/api/reservation")
-  .post(verifyToken, setPosts)
-  .get(verifyToken, isAdmin, getPosts);
-router.get("/api/reservations/me", verifyToken, isAdmin, getme);
-router.route("/api/reservations/:id").delete(verifyToken, isAdmin, removes);
+  .post(verifyToken, showReservation)
+  .get(verifyToken, isAdmin, showList);
+router.get("/api/reservations/me", verifyToken, isAdmin, showHistory);
+router.route("/api/reservations/:id").delete(verifyToken, isAdmin, showRemove);
 module.exports = router;

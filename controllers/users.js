@@ -1,25 +1,25 @@
-const { Users, details, remove } = require("../services/users");
-module.exports.User = async (req, res) => {
+const { listUsers, setDetailsUser, setRemove } = require("../services/users");
+module.exports.showListUsers = async (req, res) => {
   try {
-    const resultfinal = await Users(req.user);
+    const resultfinal = await listUsers(req.user);
     res.status(200).send(resultfinal);
   } catch (err) {
     console.log(err);
     res.status(404).send("Erreur serveur");
   }
 };
-module.exports.detail = async (req, res) => {
+module.exports.showDetailUser = async (req, res) => {
   try {
-    const resultfinal = await details(req.params, req.user);
+    const resultfinal = await setDetailsUser(req.params, req.user);
     res.status(200).send(resultfinal);
   } catch (err) {
     console.log(err);
     res.status(404).send("Erreur serveur");
   }
 };
-module.exports.removes = async (req, res) => {
+module.exports.remove = async (req, res) => {
   try {
-    const resultfinal = await remove(req.params, req.user);
+    const resultfinal = await setRemove(req.params, req.user);
     res.status(200).send(resultfinal);
   } catch (err) {
     console.log(err);

@@ -10,7 +10,7 @@ const {
   AddRole,
   AddUser,
 } = require("../repository/auth");
-module.exports.setPost = async (data) => {
+module.exports.setRegister = async (data) => {
   const { name, password, confirmPassword } = data;
 
   if (!name || !password || !confirmPassword) {
@@ -40,7 +40,7 @@ module.exports.setPost = async (data) => {
   };
 };
 
-module.exports.getPost = async (req) => {
+module.exports.setProfil = async (req) => {
   const { name } = req.query;
   if (!name) {
     throw new Error("Nom manquant");

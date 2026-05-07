@@ -1,5 +1,5 @@
-const { getUsers, detailUsers, remove } = require("../repository/users");
-module.exports.Users = async (user) => {
+const { getAllUsers, detailUsers, removeUser } = require("../repository/users");
+module.exports.listUsers = async (user) => {
   if (!user) {
     throw new Error({ message: "Veuillez vous connecter !!" });
   }
@@ -11,13 +11,13 @@ module.exports.Users = async (user) => {
     });
   }
 
-  const result = await getUsers();
+  const result = await getAllUsers();
   return {
     message: "Liste des utilisateurs",
     resultat: result.rows,
   };
 };
-module.exports.details = async (data, user) => {
+module.exports.setDetailsUser = async (data, user) => {
   const { id } = data;
   if (!user) {
     throw new Error({ message: "Veuillez vous connecter !!" });
@@ -35,7 +35,7 @@ module.exports.details = async (data, user) => {
     result: result.rows,
   };
 };
-module.exports.remove = async (data, user) => {
+module.exports.setRemove = async (data, user) => {
   const { id } = data;
 
   const userRole = typeof user.role === "object" ? user.role.name : user.role;
@@ -45,7 +45,7 @@ module.exports.remove = async (data, user) => {
     });
   }
 
-  const result = await remove(id);
+  const result = await removeUser(id);
 
   if (result.rowCount === 0) {
     throw new Error({ message: "Utilisateur non trouvé" });

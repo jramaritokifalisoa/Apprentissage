@@ -1,11 +1,11 @@
 const {
   getVoyageById,
   addReservation,
-  setAdmin,
-  getAll,
+  getAllReservation,
+  getReservation,
   removeAll,
 } = require("../repository/reservation");
-module.exports.setPost = async (data, user) => {
+module.exports.makeReservation = async (data, user) => {
   const { voyage_id, places } = data;
 
   const nomClient = user.name;
@@ -27,7 +27,7 @@ module.exports.setPost = async (data, user) => {
     data: reservationResult.rows[0],
   };
 };
-module.exports.getPost = async (user) => {
+module.exports.reservationList = async (user) => {
   if (!user) {
     throw new Error("Non authentifié");
   }
@@ -41,27 +41,27 @@ module.exports.getPost = async (user) => {
     );
   }
 
-  const result = await setAdmin();
+  const result = await getAllReservation();
 
   return {
     message: "Voici la liste des reservations",
     result: result.rows,
   };
 };
-module.exports.getMe = async (user) => {
+module.exports.reservationHistory = async (user) => {
   if (!user) {
     throw new Error("Accès refusé ou Utilisateur non authentifié");
   }
   const nomUtilisateur = user.name;
 
-  const result = await getAll(nomUtilisateur);
+  const result = await getReservation(nomUtilisateur);
 
   return {
     message: "Historique des reservations",
     result: result.rows,
   };
 };
-module.exports.remove = async (data, user) => {
+module.exports.removeReservation = async (data, user) => {
   const { id } = data;
 
   if (!user) {

@@ -1,5 +1,5 @@
 const db = require("../db");
-module.exports.getUsers = async () => {
+module.exports.getAllUsers = async () => {
   const result = await db.query("SELECT * FROM users WHERE role = $1", [
     "user",
   ]);
@@ -12,23 +12,17 @@ module.exports.detailUsers = async (id) => {
   );
   return result;
 };
-module.exports.remove = async (id) => {
-  try {
-    await db.query("BEGIN");
+module.exports.removeUser = async (id) => {
+  await db.query("BEGIN");
 
-    await db.query("DELETE FROM roles WHERE user_id = $1", [id]);
+  await db.query("DELETE FROM roles WHERE user_id = $1", [id]);
 
-    const result = await db.query(
-      "DELETE FROM users WHERE id = $1 AND role = $2 RETURNING *",
-      [id, "user"],
-    );
+  const result = await db.query(
+    "DELETE FROM users WHERE id = $1 AND role = $2 RETURNING *",
+    [id, "user"],
+  );
 
-    await db.query("COMMIT");
+  await db.query("COMMIT");
 
-    return result;
-  } catch (error) {
-    await db.query("ROLLBACK");
-    console.error("Erreur lors de la suppression :", error);
-    throw error;
-  }
+  return result;
 };

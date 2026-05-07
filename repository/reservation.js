@@ -11,7 +11,7 @@ module.exports.addReservation = async (voyage_id, nom, places) => {
   );
   return result;
 };
-module.exports.setAdmin = async () => {
+module.exports.getAllReservation = async () => {
   const result = await db.query(
     `SELECT r.*, v.destination 
        FROM reservations r
@@ -20,7 +20,7 @@ module.exports.setAdmin = async () => {
   );
   return result;
 };
-module.exports.getAll = async (nom) => {
+module.exports.getReservation = async (nom) => {
   const result = await db.query(
     `SELECT 
         r.id,
