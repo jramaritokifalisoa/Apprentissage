@@ -1,14 +1,14 @@
 const {
-  getPost,
+  voyageList,
   createVoyage,
   findVoyage,
-  setUpdate,
-  setRemove,
+  voyageUpdate,
+  voyageRemove,
 } = require("../services/voyage");
 
 module.exports.showAllVoayge = async (req, res) => {
   try {
-    const resultfinal = await getPost();
+    const resultfinal = await voyageList();
     res.status(200).send(resultfinal);
   } catch (err) {
     console.log(err);
@@ -17,7 +17,7 @@ module.exports.showAllVoayge = async (req, res) => {
 };
 module.exports.voyagecreated = async (req, res) => {
   try {
-    const resultfinal = await setPost(req.body, req.user);
+    const resultfinal = await createVoyage(req.body, req.user);
     res.status(200).send(resultfinal);
   } catch (err) {
     console.log(err);
@@ -36,7 +36,7 @@ module.exports.showVoyage = async (req, res) => {
 module.exports.showNewVoyage = async (req, res) => {
   try {
     const voyageData = { id: req.params.id, ...req.body };
-    const resultfinal = await setUpdate(voyageData, req.user);
+    const resultfinal = await voyageUpdate(voyageData, req.user);
     res.status(200).send(resultfinal);
   } catch (err) {
     console.log(err);
@@ -45,7 +45,7 @@ module.exports.showNewVoyage = async (req, res) => {
 };
 module.exports.voyageRemoved = async (req, res) => {
   try {
-    const resultfinal = await setRemove(req.params, req.user);
+    const resultfinal = await voyageRemove(req.params, req.user);
     res.status(200).send(resultfinal);
   } catch (err) {
     console.log(err);

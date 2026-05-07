@@ -6,7 +6,7 @@ const {
   updateVoyage,
   removeVoyage,
 } = require("../repository/voyage");
-module.exports.getPost = async () => {
+module.exports.voyageList = async () => {
   const result = await getAllVoyage();
   return result;
 };
@@ -54,7 +54,7 @@ module.exports.findVoyage = async (data) => {
     data: result.rows[0],
   };
 };
-module.exports.setUpdate = async (data, user) => {
+module.exports.voyageUpdate = async (data, user) => {
   const { destination, prix, Nombre_place } = data;
   const { id } = data;
 
@@ -82,7 +82,7 @@ module.exports.setUpdate = async (data, user) => {
     data: result.rows[0],
   };
 };
-module.exports.setRemove = async (data, user) => {
+module.exports.voyageRemove = async (data, user) => {
   const { id } = data;
 
   const userRole = typeof user.role === "object" ? user.role.name : user.role;

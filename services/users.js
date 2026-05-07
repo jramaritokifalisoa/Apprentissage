@@ -1,4 +1,8 @@
-const { getAllUsers, detailUsers, removeUser } = require("../repository/users");
+const {
+  getAllUsers,
+  userAllDetail,
+  removeAllUser,
+} = require("../repository/users");
 module.exports.listUsers = async (user) => {
   if (!user) {
     throw new Error({ message: "Veuillez vous connecter !!" });
@@ -17,7 +21,7 @@ module.exports.listUsers = async (user) => {
     resultat: result.rows,
   };
 };
-module.exports.setDetailsUser = async (data, user) => {
+module.exports.detailsUser = async (data, user) => {
   const { id } = data;
   if (!user) {
     throw new Error({ message: "Veuillez vous connecter !!" });
@@ -29,13 +33,13 @@ module.exports.setDetailsUser = async (data, user) => {
       message: "Accès refusé : seuls les admins peut voir les details users",
     });
   }
-  const result = await detailUsers(id);
+  const result = await userAllDetail(id);
   return {
     message: "Détails d'un utilisateur",
     result: result.rows,
   };
 };
-module.exports.setRemove = async (data, user) => {
+module.exports.userRemove = async (data, user) => {
   const { id } = data;
 
   const userRole = typeof user.role === "object" ? user.role.name : user.role;
@@ -45,7 +49,7 @@ module.exports.setRemove = async (data, user) => {
     });
   }
 
-  const result = await removeUser(id);
+  const result = await removeAllUser(id);
 
   if (result.rowCount === 0) {
     throw new Error({ message: "Utilisateur non trouvé" });

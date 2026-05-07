@@ -1,4 +1,4 @@
-const { listUsers, setDetailsUser, setRemove } = require("../services/users");
+const { listUsers, detailsUser, userRemove } = require("../services/users");
 module.exports.showListUsers = async (req, res) => {
   try {
     const resultfinal = await listUsers(req.user);
@@ -10,7 +10,7 @@ module.exports.showListUsers = async (req, res) => {
 };
 module.exports.showDetailUser = async (req, res) => {
   try {
-    const resultfinal = await setDetailsUser(req.params, req.user);
+    const resultfinal = await detailsUser(req.params, req.user);
     res.status(200).send(resultfinal);
   } catch (err) {
     console.log(err);
@@ -19,7 +19,7 @@ module.exports.showDetailUser = async (req, res) => {
 };
 module.exports.remove = async (req, res) => {
   try {
-    const resultfinal = await setRemove(req.params, req.user);
+    const resultfinal = await userRemove(req.params, req.user);
     res.status(200).send(resultfinal);
   } catch (err) {
     console.log(err);

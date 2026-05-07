@@ -5,14 +5,14 @@ module.exports.getAllUsers = async () => {
   ]);
   return result;
 };
-module.exports.detailUsers = async (id) => {
+module.exports.userAllDetail = async (id) => {
   const result = await db.query(
     "SELECT * FROM users WHERE id = $1 AND role = $2",
     [id, "user"],
   );
   return result;
 };
-module.exports.removeUser = async (id) => {
+module.exports.removeAllUser = async (id) => {
   await db.query("BEGIN");
 
   await db.query("DELETE FROM roles WHERE user_id = $1", [id]);
