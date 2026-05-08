@@ -62,19 +62,8 @@ module.exports = {
 
   "/me": {
     get: {
-      summary: "Voir profil par nom",
+      summary: "Voir mon profil ",
       security: [{ bearerAuth: [] }],
-      parameters: [
-        {
-          name: "name",
-          in: "query",
-          required: true,
-          description: "Ici le nom de l'utilisateur à rechercher",
-          schema: {
-            type: "string",
-          },
-        },
-      ],
       responses: {
         200: {
           description: "Profil utilisateur trouvé",

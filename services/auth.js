@@ -38,12 +38,11 @@ module.exports.userRegister = async (data) => {
   };
 };
 
-module.exports.userProfil = async (data) => {
-  const { name } = data;
-  if (!name) {
+module.exports.userProfil = async (user) => {
+  if (!user.name) {
     throw new Error("Nom manquant");
   }
-  const result = await findName(name);
+  const result = await findName(user.name);
   if (result.rows.length === 0) {
     throw new Error("Identifiant invalide");
   }

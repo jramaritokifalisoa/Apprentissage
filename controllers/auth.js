@@ -15,7 +15,7 @@ module.exports.register = async (req, res) => {
 };
 module.exports.profil = async (req, res) => {
   try {
-    const resultfinal = await userProfil(req.body);
+    const resultfinal = await userProfil(req.user);
     return res.status(200).send(resultfinal);
   } catch (err) {
  console.error(err);
