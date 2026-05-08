@@ -1,8 +1,8 @@
 const {
   getAllVoyage,
   getVoyage,
-  Addvoyage,
-  chechId,
+  addvoyage,
+  checkId,
   updateVoyage,
   removeVoyage,
 } = require("../repository/voyage");
@@ -34,7 +34,7 @@ module.exports.createVoyage = async (data, user) => {
     );
   }
 
-  const result = await Addvoyage(destination, prix, Nombre_place);
+  const result = await addvoyage(destination, prix, Nombre_place);
 
   return {
     message: "Voyage créé avec succès",
@@ -44,7 +44,7 @@ module.exports.createVoyage = async (data, user) => {
 module.exports.findVoyage = async (data) => {
   const id = parseInt(data);
 
-  const result = await chechId(id);
+  const result = await checkId(id);
 
   if (result.rows.length === 0) {
     throw new Error("Id inexistant");
@@ -60,7 +60,6 @@ module.exports.voyageUpdate = async (data, user) => {
 
   const userRole = typeof user.role === "object" ? user.role.name : user.role;
 
-  console.log("DEBUG ROLE DANS SERVICE :", userRole);
   if (!destination || !prix || !Nombre_place) {
     throw new Error("Données manquantes");
   }

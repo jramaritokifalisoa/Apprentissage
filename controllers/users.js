@@ -5,7 +5,7 @@ module.exports.showListUsers = async (req, res) => {
     res.status(200).send(resultfinal);
   } catch (err) {
     console.log(err);
-    res.status(404).send("Erreur serveur");
+    res.status(500).send({message : err.message});
   }
 };
 module.exports.showDetailUser = async (req, res) => {
@@ -14,7 +14,7 @@ module.exports.showDetailUser = async (req, res) => {
     res.status(200).send(resultfinal);
   } catch (err) {
     console.log(err);
-    res.status(404).send("Erreur serveur");
+    res.status(500).send({message : err.message});
   }
 };
 module.exports.remove = async (req, res) => {
@@ -23,6 +23,6 @@ module.exports.remove = async (req, res) => {
     res.status(200).send(resultfinal);
   } catch (err) {
     console.log(err);
-    res.status(404).send("Erreur serveur");
+    res.status(500).send({message : err.message});
   }
 };

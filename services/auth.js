@@ -38,8 +38,8 @@ module.exports.userRegister = async (data) => {
   };
 };
 
-module.exports.userProfil = async (req) => {
-  const { name } = req.query;
+module.exports.userProfil = async (data) => {
+  const { name } = data;
   if (!name) {
     throw new Error("Nom manquant");
   }

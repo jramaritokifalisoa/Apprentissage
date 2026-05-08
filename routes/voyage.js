@@ -1,9 +1,9 @@
 const express = require("express");
 const {
-  showAllVoayge,
+  showAllVoyage,
   voyagecreated,
   showVoyage,
-  showNewVoyage,
+  updateVoyage,
   voyageRemoved,
 } = require("../controllers/voyage");
 
@@ -11,13 +11,13 @@ const { verifyToken, isAdmin } = require("../middleware/index");
 const router = express.Router();
 router
   .route("/api/voyages")
-  .get(showAllVoayge)
+  .get(showAllVoyage)
   .post(verifyToken, isAdmin, voyagecreated);
 
 router
   .route("/api/voyages/:id")
   .get(showVoyage)
 
-  .put(verifyToken, isAdmin, showNewVoyage)
+  .put(verifyToken, isAdmin, updateVoyage)
   .delete(verifyToken, isAdmin, voyageRemoved);
 module.exports = router;

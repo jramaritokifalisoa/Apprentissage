@@ -7,7 +7,7 @@ module.exports.isAdmin = (req, res, next) => {
 
   const role =
     typeof req.user.role === "object" ? req.user.role.name : req.user.role;
-  console.log("DEBUG ROLE DANS MIDDLEWARE :", role);
+
 
   if (role === "admin" || role === "SuperAdmin") {
     next();

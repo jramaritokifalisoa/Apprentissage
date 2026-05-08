@@ -4,13 +4,13 @@ const {
   reservationHistory,
   removeReservation,
 } = require("../services/reservation");
-module.exports.showReservation = async (req, res) => {
+module.exports.createReservation = async (req, res) => {
   try {
     const resultfinal = await makeReservation(req.body, req.user);
     res.status(200).send(resultfinal);
   } catch (err) {
     console.log(err);
-    res.status(404).send("Erreur serveur");
+    res.status(500).send({message : err.message});
   }
 };
 module.exports.showList = async (req, res) => {
@@ -19,7 +19,7 @@ module.exports.showList = async (req, res) => {
     res.status(200).send(resultfinal);
   } catch (err) {
     console.log(err);
-    res.status(404).send("Erreur serveur");
+    res.status(500).send({message : err.message});
   }
 };
 module.exports.showHistory = async (req, res) => {
@@ -28,15 +28,15 @@ module.exports.showHistory = async (req, res) => {
     res.status(200).send(resultfinal);
   } catch (err) {
     console.log(err);
-    res.status(404).send("Erreur serveur");
+    res.status(500).send({message : err.message});
   }
 };
-module.exports.showRemove = async (req, res) => {
+module.exports.removeReservation = async (req, res) => {
   try {
     const resultfinal = await removeReservation(req.params, req.user);
     res.status(200).send(resultfinal);
   } catch (err) {
     console.log(err);
-    res.status(404).send("Erreur serveur");
+    res.status(500).send({message : err.message});
   }
 };

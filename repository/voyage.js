@@ -11,14 +11,14 @@ module.exports.getVoyage = async (id) => {
   );
   return result;
 };
-module.exports.Addvoyage = async (destination, prix, Nombre_place) => {
+module.exports.addvoyage = async (destination, prix, Nombre_place) => {
   const result = await db.query(
     "INSERT INTO voyages(destination, prix, places) VALUES($1, $2, $3) RETURNING *",
     [destination, prix, Nombre_place],
   );
   return result;
 };
-module.exports.chechId = async (id) => {
+module.exports.checkId = async (id) => {
   const result = await db.query("SELECT * FROM voyages WHERE id = $1", [id]);
   return result;
 };

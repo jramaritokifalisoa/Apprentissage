@@ -5,14 +5,14 @@ const {
 } = require("../repository/users");
 module.exports.listUsers = async (user) => {
   if (!user) {
-    throw new Error({ message: "Veuillez vous connecter !!" });
+    throw new Error("Veuillez vous connecter !!");
   }
 
   const userRole = typeof user.role === "object" ? user.role.name : user.role;
   if (userRole !== "admin" && userRole !== "SuperAdmin") {
-    throw new Error({
-      message: "Accès refusé : seuls les admins peut voir les users",
-    });
+    throw new Error(
+       "Accès refusé : seuls les admins peut voir les users",
+    );
   }
 
   const result = await getAllUsers();
@@ -24,14 +24,13 @@ module.exports.listUsers = async (user) => {
 module.exports.detailsUser = async (data, user) => {
   const { id } = data;
   if (!user) {
-    throw new Error({ message: "Veuillez vous connecter !!" });
+    throw new Error("Veuillez vous connecter !!");
   }
 
   const userRole = typeof user.role === "object" ? user.role.name : user.role;
   if (userRole !== "admin" && userRole !== "SuperAdmin") {
-    throw new Error({
-      message: "Accès refusé : seuls les admins peut voir les details users",
-    });
+    throw new Error("Accès refusé : seuls les admins peut voir les details users",
+    );
   }
   const result = await userAllDetail(id);
   return {
@@ -44,15 +43,14 @@ module.exports.userRemove = async (data, user) => {
 
   const userRole = typeof user.role === "object" ? user.role.name : user.role;
   if (userRole !== "admin" && userRole !== "SuperAdmin") {
-    throw new Error({
-      message: "Accès refusé : seuls les admins peuvent suprimer les users",
-    });
+    throw new Error("Accès refusé : seuls les admins peuvent suprimer les users",
+    );
   }
 
   const result = await removeAllUser(id);
 
   if (result.rowCount === 0) {
-    throw new Error({ message: "Utilisateur non trouvé" });
+    throw new Error("Utilisateur non trouvé" );
   }
 
   return { message: "Utilisateur et ses données supprimés" };

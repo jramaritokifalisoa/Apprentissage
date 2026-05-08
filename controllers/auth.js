@@ -1,4 +1,4 @@
-const { userRegister, serProfil, userLogin } = require("../services/auth");
+const { userRegister, userProfil, userLogin } = require("../services/auth");
 
 module.exports.register = async (req, res) => {
   try {
@@ -6,16 +6,16 @@ module.exports.register = async (req, res) => {
     res.status(201).json(resultfinal);
   } catch (err) {
     console.log(err);
-    res.status(400).json("Erreur serveur");
+    res.status(500).json({message : err.message});
   }
 };
 module.exports.profil = async (req, res) => {
   try {
-    const resultfinal = await userProfil(req);
+    const resultfinal = await userProfil(req.body);
     return res.status(200).send(resultfinal);
   } catch (err) {
     console.log(err);
-    return res.status(404).send("Erreur serveur");
+    return res.status(500).send({message : err.message});
   }
 };
 module.exports.login = async (req, res) => {
@@ -24,6 +24,6 @@ module.exports.login = async (req, res) => {
     return res.status(200).send(resultfinal);
   } catch (err) {
     console.log(err);
-    return res.status(404).send("Erreur serveur");
+    return res.status(500).send({message : err.message});
   }
 };

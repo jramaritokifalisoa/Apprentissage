@@ -32,7 +32,6 @@ module.exports.reservationList = async (user) => {
     throw new Error("Non authentifié");
   }
 
-  const adminId = user.id;
   const userRole = typeof user.role === "object" ? user.role.name : user.role;
 
   if (userRole !== "admin" && userRole !== "SuperAdmin") {
