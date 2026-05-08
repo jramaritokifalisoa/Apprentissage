@@ -48,7 +48,7 @@ module.exports.reservationList = async (user) => {
   };
 };
 module.exports.reservationHistory = async (user) => {
-  if (!user) {
+  if (!user.name) {
     throw new Error("Accès refusé ou Utilisateur non authentifié");
   }
   const nomUtilisateur = user.name;

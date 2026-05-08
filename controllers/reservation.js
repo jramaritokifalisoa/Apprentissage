@@ -5,6 +5,7 @@ const {
   removeReservation,
 } = require("../services/reservation");
 module.exports.createReservation = async (req, res) => {
+  
   try {
     const resultfinal = await makeReservation(req.body, req.user);
     res.status(200).send(resultfinal);
@@ -14,7 +15,7 @@ module.exports.createReservation = async (req, res) => {
       success: false,
       message: err.message || "Erreur serveur"
     });
-  
+    
   }
 };
 module.exports.showList = async (req, res) => {

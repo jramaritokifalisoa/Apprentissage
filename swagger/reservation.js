@@ -3,6 +3,7 @@ module.exports = {
   "/api/reservation": {
     post: {
       summary: "Créer une réservation",
+      
       requestBody: {
         required: true,
         content: {
