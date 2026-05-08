@@ -14,7 +14,7 @@ Sommaire :
 
 _Fonctionnalités :
 
-    I) _ Authentification sécurisée : Inscription, connexion et gestion des rôles (User/Admin) via JWT.                      
+    I) _ Authentification sécurisée : Inscription, connexion et profil avec gestion des rôles (User/Admin) via JWT.                      
     II) _ Gestion des accès : Middlewares de protection des routes selon les permissions.                                      
     III) _ Réservations : CRUD complet pour les utilisateurs et les administrateurs.                                            
     IV) _ Base de données relationnelle : Structure SQL optimisée avec contraintes                                                    
