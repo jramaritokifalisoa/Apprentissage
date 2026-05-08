@@ -11,8 +11,12 @@ module.exports.showAllVoyage = async (req, res) => {
     const resultfinal = await voyageList();
     res.status(200).send(resultfinal);
   } catch (err) {
-    console.log(err);
-    res.status(500).send({message : err.message});
+     console.error(err);
+    return res.status(500).json({
+      success: false,
+      message: err.message || "Erreur serveur"
+    });
+  
   }
 };
 module.exports.voyagecreated = async (req, res) => {
@@ -20,8 +24,12 @@ module.exports.voyagecreated = async (req, res) => {
     const resultfinal = await createVoyage(req.body, req.user);
     res.status(201).send(resultfinal);
   } catch (err) {
-    console.log(err);
-    res.status(500).send({message : err.message});
+     console.error(err);
+    return res.status(500).json({
+      success: false,
+      message: err.message || "Erreur serveur"
+    });
+  
   }
 };
 module.exports.showVoyage = async (req, res) => {
@@ -29,8 +37,12 @@ module.exports.showVoyage = async (req, res) => {
     const resultfinal = await findVoyage(req.params.id);
     res.status(200).send(resultfinal);
   } catch (err) {
-    console.log(err);
-    res.status(500).send({message : err.message});
+    console.error(err);
+    return res.status(500).json({
+      success: false,
+      message: err.message || "Erreur serveur"
+    });
+  
   }
 };
 module.exports.updateVoyage = async (req, res) => {
@@ -39,8 +51,12 @@ module.exports.updateVoyage = async (req, res) => {
     const resultfinal = await voyageUpdate(voyageData, req.user);
     res.status(200).send(resultfinal);
   } catch (err) {
-    console.log(err);
-    res.status(500).send({message : err.message});
+  console.error(err);
+    return res.status(500).json({
+      success: false,
+      message: err.message || "Erreur serveur"
+    });
+  
   }
 };
 module.exports.voyageRemoved = async (req, res) => {
@@ -48,7 +64,11 @@ module.exports.voyageRemoved = async (req, res) => {
     const resultfinal = await voyageRemove(req.params, req.user);
     res.status(200).send(resultfinal);
   } catch (err) {
-    console.log(err);
-    res.status(500).send({message : err.message});
+     console.error(err);
+    return res.status(500).json({
+      success: false,
+      message: err.message || "Erreur serveur"
+    });
+  
   }
 };

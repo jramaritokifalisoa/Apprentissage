@@ -9,8 +9,12 @@ module.exports.createReservation = async (req, res) => {
     const resultfinal = await makeReservation(req.body, req.user);
     res.status(200).send(resultfinal);
   } catch (err) {
-    console.log(err);
-    res.status(500).send({message : err.message});
+    console.error(err);
+    return res.status(500).json({
+      success: false,
+      message: err.message || "Erreur serveur"
+    });
+  
   }
 };
 module.exports.showList = async (req, res) => {
@@ -18,8 +22,12 @@ module.exports.showList = async (req, res) => {
     const resultfinal = await reservationList(req.user);
     res.status(200).send(resultfinal);
   } catch (err) {
-    console.log(err);
-    res.status(500).send({message : err.message});
+    console.error(err);
+    return res.status(500).json({
+      success: false,
+      message: err.message || "Erreur serveur"
+    });
+  
   }
 };
 module.exports.showHistory = async (req, res) => {
@@ -27,8 +35,12 @@ module.exports.showHistory = async (req, res) => {
     const resultfinal = await reservationHistory(req.user);
     res.status(200).send(resultfinal);
   } catch (err) {
-    console.log(err);
-    res.status(500).send({message : err.message});
+     console.error(err);
+    return res.status(500).json({
+      success: false,
+      message: err.message || "Erreur serveur"
+    });
+  
   }
 };
 module.exports.removeReservation = async (req, res) => {
@@ -36,7 +48,11 @@ module.exports.removeReservation = async (req, res) => {
     const resultfinal = await removeReservation(req.params, req.user);
     res.status(200).send(resultfinal);
   } catch (err) {
-    console.log(err);
-    res.status(500).send({message : err.message});
+    console.error(err);
+    return res.status(500).json({
+      success: false,
+      message: err.message || "Erreur serveur"
+    });
+  
   }
 };

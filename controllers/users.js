@@ -4,8 +4,12 @@ module.exports.showListUsers = async (req, res) => {
     const resultfinal = await listUsers(req.user);
     res.status(200).send(resultfinal);
   } catch (err) {
-    console.log(err);
-    res.status(500).send({message : err.message});
+  console.error(err);
+    return res.status(500).json({
+      success: false,
+      message: err.message || "Erreur serveur"
+    });
+  
   }
 };
 module.exports.showDetailUser = async (req, res) => {
@@ -13,8 +17,12 @@ module.exports.showDetailUser = async (req, res) => {
     const resultfinal = await detailsUser(req.params, req.user);
     res.status(200).send(resultfinal);
   } catch (err) {
-    console.log(err);
-    res.status(500).send({message : err.message});
+    console.error(err);
+    return res.status(500).json({
+      success: false,
+      message: err.message || "Erreur serveur"
+    });
+  
   }
 };
 module.exports.remove = async (req, res) => {
@@ -22,7 +30,11 @@ module.exports.remove = async (req, res) => {
     const resultfinal = await userRemove(req.params, req.user);
     res.status(200).send(resultfinal);
   } catch (err) {
-    console.log(err);
-    res.status(500).send({message : err.message});
+    console.error(err);
+    return res.status(500).json({
+      success: false,
+      message: err.message || "Erreur serveur"
+    });
+  
   }
 };

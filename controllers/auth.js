@@ -5,8 +5,12 @@ module.exports.register = async (req, res) => {
     const resultfinal = await userRegister(req.body);
     res.status(201).json(resultfinal);
   } catch (err) {
-    console.log(err);
-    res.status(500).json({message : err.message});
+     console.error(err);
+    return res.status(500).json({
+      success: false,
+      message: err.message || "Erreur serveur"
+    });
+  
   }
 };
 module.exports.profil = async (req, res) => {
@@ -14,8 +18,12 @@ module.exports.profil = async (req, res) => {
     const resultfinal = await userProfil(req.body);
     return res.status(200).send(resultfinal);
   } catch (err) {
-    console.log(err);
-    return res.status(500).send({message : err.message});
+ console.error(err);
+    return res.status(500).json({
+      success: false,
+      message: err.message || "Erreur serveur"
+    });
+  
   }
 };
 module.exports.login = async (req, res) => {
@@ -23,7 +31,11 @@ module.exports.login = async (req, res) => {
     const resultfinal = await userLogin(req.body);
     return res.status(200).send(resultfinal);
   } catch (err) {
-    console.log(err);
-    return res.status(500).send({message : err.message});
+  console.error(err);
+    return res.status(500).json({
+      success: false,
+      message: err.message || "Erreur serveur"
+    });
+  
   }
 };
