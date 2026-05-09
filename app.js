@@ -6,7 +6,7 @@ const apivoyage = require("./routes/voyage.js");
 const apiUsers = require("./routes/users.js");
 const apireservation = require("./routes/reservation.js");
 const app = express();
-const port = 5020;
+const port = 4000;
 const cors = require("cors");
 app.use(
   cors({
