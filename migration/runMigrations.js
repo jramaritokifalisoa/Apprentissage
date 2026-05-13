@@ -1,13 +1,13 @@
 const fs = require("fs");
 const path = require("path");
-const client = require("../db"); // UNE SEULE SOURCE
+const client = require("../db");
 
 async function runMigrations() {
   try {
-    // await client.connect();
+
     console.log("Connected to PostgreSQL");
 
-    const files = ["001_users.sql", "002_voyages.sql", "003_reservations.sql"];
+    const files = ["000_roles.sql","001_users.sql", "002_voyages.sql", "003_reservations.sql"];
 
     for (const file of files) {
       const sql = fs.readFileSync(

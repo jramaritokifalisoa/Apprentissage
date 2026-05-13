@@ -7,11 +7,11 @@ const apiUsers = require("./routes/users.js");
 const apireservation = require("./routes/reservation.js");
 require("dotenv").config();
 const app = express();
-const port = process.env.port;
+const port = 4000;
 const cors = require("cors");
 app.use(
   cors({
-    origin: "http://localhost:4000",
+    origin: "*",
     methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"],
   }),
@@ -20,7 +20,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
-
 
 app.use("/", authRoutes);
 app.use("/", apivoyage);

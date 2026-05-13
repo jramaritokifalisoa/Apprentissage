@@ -14,7 +14,7 @@ module.exports.userRegister = async (data) => {
   if (!name || !password || !confirmPassword) {
     throw new Error("Erreur de validation");
   }
-  
+
   if (password !== confirmPassword) {
     throw new Error("Problème avec votre password");
   }
@@ -31,7 +31,7 @@ module.exports.userRegister = async (data) => {
     success: true,
     message: "Utilisateur créé avec succès",
     data: {
-      name: newUser,
+      name: newUser[0].name,
       role: role,
     },
   };
@@ -65,7 +65,7 @@ module.exports.userLogin = async (data) => {
         role: "admin",
       },
       process.env.SECRET_KEY,
-      { expiresIn: "1h" }
+      { expiresIn: "1h" },
     );
 
     return {
@@ -86,10 +86,7 @@ module.exports.userLogin = async (data) => {
 
   const user = result.rows[0];
 
-  const checkPassword = await bcrypt.compare(
-    password,
-    user.password
-  );
+  const checkPassword = await bcrypt.compare(password, user.password);
 
   if (!checkPassword) {
     throw new Error("Mot de passe incorrect");
@@ -102,7 +99,7 @@ module.exports.userLogin = async (data) => {
       role: user.role?.name ?? user.role,
     },
     process.env.SECRET_KEY,
-    { expiresIn: "1h" }
+    { expiresIn: "1h" },
   );
 
   return {
