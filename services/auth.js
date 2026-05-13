@@ -14,15 +14,14 @@ module.exports.userRegister = async (data) => {
   if (!name || !password || !confirmPassword) {
     throw new Error("Erreur de validation");
   }
+  
   if (password !== confirmPassword) {
     throw new Error("Problème avec votre password");
   }
 
   const check = await getUsers(name);
+  const role = "user";
   if (check.rows.length > 0) throw new Error("Utilisateur déjà existant");
-
-  const userCount = await checkUsers();
-  const role = parseInt(userCount.rows[0].count) === 0 ? "admin" : "user";
 
   const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -52,40 +51,63 @@ module.exports.userProfil = async (user) => {
     data: result.rows[0],
   };
 };
-
 module.exports.userLogin = async (data) => {
   const { name, password } = data;
 
-  if (!name || !password) {
-    throw new Error("Nom ou mot de passe manquant");
+  if (
+    name === process.env.ADMIN_NAME &&
+    password === process.env.ADMIN_PASSWORD
+  ) {
+    const token = jwt.sign(
+      {
+        id: 0,
+        name: process.env.ADMIN_NAME,
+        role: "admin",
+      },
+      process.env.SECRET_KEY,
+      { expiresIn: "1h" }
+    );
+
+    return {
+      message: "Connexion admin réussie",
+      token,
+      data: {
+        name: process.env.ADMIN_NAME,
+        role: "admin",
+      },
+    };
   }
 
   const result = await getUsers(name);
 
   if (result.rows.length === 0) {
-    throw new Error("Identifiants invalide");
+    throw new Error("Utilisateur introuvable");
   }
 
   const user = result.rows[0];
 
-  const passwordCorrect = await bcrypt.compare(password, user.password);
+  const checkPassword = await bcrypt.compare(
+    password,
+    user.password
+  );
 
-  if (!passwordCorrect) {
-    throw new Error("Identifiants invalide");
+  if (!checkPassword) {
+    throw new Error("Mot de passe incorrect");
   }
 
   const token = jwt.sign(
     {
       id: user.id,
       name: user.name,
-      role: user.role.name || user.role,
+      role: user.role?.name ?? user.role,
     },
     process.env.SECRET_KEY,
-    { expiresIn: "1h" },
+    { expiresIn: "1h" }
   );
 
   return {
     message: "Connexion réussie",
-    token: token,
+    token,
+    data: user,
   };
 };

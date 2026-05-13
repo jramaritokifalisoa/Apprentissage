@@ -18,9 +18,13 @@ module.exports = {
           "application/json": {
             schema: {
               type: "object",
-              required: ["destination", "prix", "admin_id"],
+              required: ["départ", "arrivée", "prix", "admin_id"],
               properties: {
-                destination: {
+                départ: {
+                  type: "string",
+                  example: "Antananarivo",
+                },
+                Arrivée : {
                   type: "string",
                   example: "Antananarivo",
                 },

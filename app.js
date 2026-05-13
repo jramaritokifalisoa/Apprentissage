@@ -5,8 +5,9 @@ const authRoutes = require("./routes/auth.js");
 const apivoyage = require("./routes/voyage.js");
 const apiUsers = require("./routes/users.js");
 const apireservation = require("./routes/reservation.js");
+require("dotenv").config();
 const app = express();
-const port = 4000;
+const port = process.env.port;
 const cors = require("cors");
 app.use(
   cors({
@@ -19,6 +20,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+
 
 app.use("/", authRoutes);
 app.use("/", apivoyage);

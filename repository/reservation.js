@@ -5,12 +5,37 @@ module.exports.getVoyageById = async (id) => {
 };
 
 module.exports.addReservation = async (voyage_id, nom, places) => {
-  const result = await db.query(
-    "INSERT INTO reservations(voyage_id, nom, places) VALUES($1, $2, $3) RETURNING *",
-    [voyage_id, nom, places],
-  );
-  return result;
+  const client = await db.connect();
+
+  try {
+    await client.query('BEGIN');
+    const updateVoyage = await client.query(
+      "UPDATE voyages SET places = places - $1 WHERE id = $2 AND places >= $1 RETURNING *",
+      [places, voyage_id]
+    );
+    if (updateVoyage.rowCount === 0) {
+      throw new Error("Nombre de places insuffisant ou voyage introuvable");
+    }
+
+    const result = await client.query(
+      "INSERT INTO reservations(voyage_id, nom, places) VALUES($1, $2, $3) RETURNING *",
+      [voyage_id, nom, places]
+    );
+
+    await client.query('COMMIT');
+    
+    return result.rows[0];
+
+  } catch (error) {
+   
+    await client.query('ROLLBACK');
+    throw error;
+  } finally {
+
+    client.release();
+  }
 };
+
 module.exports.getAllReservation = async () => {
   const result = await db.query(
     `SELECT r.*, v.destination 

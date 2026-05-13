@@ -11,28 +11,23 @@ module.exports.voyageList = async () => {
   return result;
 };
 module.exports.createVoyage = async (data, user) => {
-  const { destination, prix, Nombre_place } = data;
+  const { depart , arrivée , prix, Nombre_place } = data;
 
   if (!user) {
     throw new Error("Utilisateur non authentifié");
   }
-  const userId = user.id;
+
   const userRole = typeof user.role === "object" ? user.role.name : user.role;
 
-  if (!destination || !prix || !Nombre_place) {
+  if (!depart || !arrivée || !prix || !Nombre_place) {
     throw new Error("Données manquantes");
-  }
-
-  const userCheck = await getVoyage(userId);
-
-  if (userCheck.rows.length === 0) {
-    throw new Error("Utilisateur introuvable");
   }
   if (userRole !== "admin" && userRole !== "SuperAdmin") {
     throw new Error(
       "Accès refusé : Seuls les admins peuvent créer des voyages",
     );
   }
+  const destination = `${depart} -> ${arrivée}`;
 
   const result = await addvoyage(destination, prix, Nombre_place);
 
