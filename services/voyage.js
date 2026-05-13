@@ -50,12 +50,13 @@ module.exports.findVoyage = async (data) => {
   };
 };
 module.exports.voyageUpdate = async (data, user) => {
-  const { destination, prix, Nombre_place } = data;
+  const { depart , arrivée , prix, Nombre_place } = data;
   const { id } = data;
 
   const userRole = typeof user.role === "object" ? user.role.name : user.role;
 
-  if (!destination || !prix || !Nombre_place) {
+
+  if (!depart , !arrivée || !prix || !Nombre_place) {
     throw new Error("Données manquantes");
   }
 
@@ -65,6 +66,7 @@ module.exports.voyageUpdate = async (data, user) => {
     );
   }
 
+  const destination = `${depart} -> ${arrivée}`;
   const result = await updateVoyage(id, destination, prix, Nombre_place);
 
   if (result.rowCount === 0) {
