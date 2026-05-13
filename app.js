@@ -10,14 +10,14 @@ const port = 4000;
 const cors = require("cors");
 app.use(
   cors({
-    origin: "https://mon-site-web.com",
+    origin: "http://localhost:4000",
     methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"],
   }),
 );
 app.use(express.json());
-
 app.use(express.urlencoded({ extended: true }));
+
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 app.use("/", authRoutes);

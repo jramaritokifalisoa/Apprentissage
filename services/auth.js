@@ -63,7 +63,7 @@ module.exports.userLogin = async (data) => {
   const result = await getUsers(name);
 
   if (result.rows.length === 0) {
-    throw new Error("Utilisateur introuvable");
+    throw new Error("Identifiants invalide");
   }
 
   const user = result.rows[0];
@@ -71,7 +71,7 @@ module.exports.userLogin = async (data) => {
   const passwordCorrect = await bcrypt.compare(password, user.password);
 
   if (!passwordCorrect) {
-    throw new Error("Mot de passe incorrect");
+    throw new Error("Identifiants invalide");
   }
 
   const token = jwt.sign(
