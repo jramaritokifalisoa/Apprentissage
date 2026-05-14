@@ -6,69 +6,44 @@ const {
   voyageRemove,
 } = require("../services/voyage");
 
-module.exports.showAllVoyage = async (req, res) => {
+module.exports.showAllVoyage = async (req, res, next) => {
   try {
     const resultfinal = await voyageList();
     res.status(200).send(resultfinal);
   } catch (err) {
-     console.error(err);
-    return res.status(500).json({
-      success: false,
-      message: err.message || "Erreur serveur"
-    });
-  
+    next(err);
   }
 };
-module.exports.voyagecreated = async (req, res) => {
+module.exports.voyagecreated = async (req, res, next) => {
   try {
     const resultfinal = await createVoyage(req.body, req.user);
     res.status(201).send(resultfinal);
   } catch (err) {
-     console.error(err);
-    return res.status(500).json({
-      success: false,
-      message: err.message || "Erreur serveur"
-    });
-  
+    next(err);
   }
 };
-module.exports.showVoyage = async (req, res) => {
+module.exports.showVoyage = async (req, res, next) => {
   try {
     const resultfinal = await findVoyage(req.params.id);
     res.status(200).send(resultfinal);
   } catch (err) {
-    console.error(err);
-    return res.status(500).json({
-      success: false,
-      message: err.message || "Erreur serveur"
-    });
-  
+    next(err);
   }
 };
-module.exports.updateVoyage = async (req, res) => {
+module.exports.updateVoyage = async (req, res, next) => {
   try {
     const voyageData = { id: req.params.id, ...req.body };
     const resultfinal = await voyageUpdate(voyageData, req.user);
     res.status(200).send(resultfinal);
   } catch (err) {
-  console.error(err);
-    return res.status(500).json({
-      success: false,
-      message: err.message || "Erreur serveur"
-    });
-  
+    next(err);
   }
 };
-module.exports.voyageRemoved = async (req, res) => {
+module.exports.voyageRemoved = async (req, res, next) => {
   try {
     const resultfinal = await voyageRemove(req.params, req.user);
     res.status(200).send(resultfinal);
   } catch (err) {
-     console.error(err);
-    return res.status(500).json({
-      success: false,
-      message: err.message || "Erreur serveur"
-    });
-  
+    next(err);
   }
 };

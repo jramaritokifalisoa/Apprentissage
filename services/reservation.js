@@ -5,33 +5,42 @@ const {
   getReservation,
   removeAll,
 } = require("../repository/reservation");
-
+const AppError = require("../utils/AppError");
 module.exports.makeReservation = async (data, user) => {
-  const { voyage_id, places } = data;
+  const { voyage_id, nom, places } = data;
 
   if (!user) {
-    throw new Error("Utilisateur non authentifié");
+    throw new AppError("Utilisateur non authentifié", 401);
   }
 
   const nomClient = user.name;
 
-  if (!voyage_id || !places) {
-    throw new Error("Données manquantes");
+  if (!voyage_id || !nom || !places) {
+    throw new AppError("Données manquantes", 400);
+  }
+
+  if (
+    !Number.isInteger(voyage_id) ||
+    !Number.isInteger(places) ||
+    voyage_id <= 0 ||
+    places <= 0
+  ) {
+    throw new AppError("Données invalides", 400);
   }
 
   const voyageCheck = await getVoyageById(voyage_id);
 
   if (voyageCheck.rows.length === 0) {
-    throw new Error("Voyage introuvable");
+    throw new AppError("Voyage introuvable", 404);
   }
 
   const voyage = voyageCheck.rows[0];
 
   if (places > voyage.places) {
-    throw new Error(`Désolé, il ne reste que ${voyage.places} places`);
+    throw new AppError(`Désolé, il ne reste que ${voyage.places} places`, 400);
   }
 
-  const reservationResult = await addReservation(voyage_id, nomClient, places);
+  const reservationResult = await addReservation(voyage_id, nom, places);
 
   return {
     success: "Réservation effectuée avec succès",
@@ -41,7 +50,7 @@ module.exports.makeReservation = async (data, user) => {
 
 module.exports.reservationList = async (user) => {
   if (!user) {
-    throw new Error("Non authentifié");
+    throw new AppError("Non authentifié", 401);
   }
 
   const userRole = typeof user.role === "object" ? user.role.name : user.role;
@@ -65,7 +74,7 @@ module.exports.reservationList = async (user) => {
 
 module.exports.reservationHistory = async (user) => {
   if (!user) {
-    throw new Error("Utilisateur non authentifié");
+    throw new AppError("Utilisateur non authentifié", 401);
   }
 
   const result = await getReservation(user.name);
@@ -80,7 +89,7 @@ module.exports.removeReservation = async (data, user) => {
   const { id } = data;
 
   if (!user) {
-    throw new Error("Veuillez vous connecter");
+    throw new AppError("Veuillez vous connecter", 401);
   }
 
   const userRole = typeof user.role === "object" ? user.role.name : user.role;
@@ -94,7 +103,7 @@ module.exports.removeReservation = async (data, user) => {
   }
 
   if (resultRemove.rowCount === 0) {
-    throw new Error("Réservation inexistante ou non autorisée");
+    throw new AppError("Réservation inexistante ou non autorisée", 404);
   }
 
   return {

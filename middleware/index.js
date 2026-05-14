@@ -1,4 +1,3 @@
-const jwt = require("jsonwebtoken");
 require("dotenv").config();
 module.exports.isAdmin = (req, res, next) => {
   if (!req.user) {
@@ -7,7 +6,6 @@ module.exports.isAdmin = (req, res, next) => {
 
   const role =
     typeof req.user.role === "object" ? req.user.role.name : req.user.role;
-
 
   if (role === "admin" || role === "SuperAdmin") {
     next();
@@ -19,7 +17,7 @@ module.exports.isAdmin = (req, res, next) => {
 };
 module.exports.verifyToken = (req, res, next) => {
   const header = req.headers.authorization;
-
+  const jwt = require("jsonwebtoken");
   if (!header) {
     return res.status(401).send("Token manquant");
   }

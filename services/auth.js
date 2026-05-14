@@ -1,7 +1,7 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
-
+const AppError = require("../utils/AppError");
 const {
   addUsers,
   getUsers,
@@ -12,16 +12,17 @@ module.exports.userRegister = async (data) => {
   const { name, password, confirmPassword } = data;
 
   if (!name || !password || !confirmPassword) {
-    throw new Error("Erreur de validation");
+    throw new AppError("Utilisateur non authentifié", 401);
   }
 
   if (password !== confirmPassword) {
-    throw new Error("Problème avec votre password");
+    throw new AppError("Les mots de passe ne correspondent pas", 400);
   }
 
   const check = await getUsers(name);
   const role = 2;
-  if (check.rows.length > 0) throw new Error("Utilisateur déjà existant");
+  if (check.rows.length > 0)
+    throw new AppError("Utilisateur déjà existant", 400);
 
   const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -39,11 +40,11 @@ module.exports.userRegister = async (data) => {
 
 module.exports.userProfil = async (user) => {
   if (!user.name) {
-    throw new Error("Nom manquant");
+    throw new AppError("Nom manquant", 400);
   }
   const result = await findName(user.name);
   if (result.rows.length === 0) {
-    throw new Error("Identifiant invalide");
+    throw new AppError("Identifiant invalide", 404);
   }
   return {
     success: true,
@@ -81,7 +82,7 @@ module.exports.userLogin = async (data) => {
   const result = await getUsers(name);
 
   if (result.rows.length === 0) {
-    throw new Error("Utilisateur introuvable");
+    throw new AppError("Utilisateur introuvable", 404);
   }
 
   const user = result.rows[0];
@@ -89,7 +90,7 @@ module.exports.userLogin = async (data) => {
   const checkPassword = await bcrypt.compare(password, user.password);
 
   if (!checkPassword) {
-    throw new Error("Mot de passe incorrect");
+    throw new AppError("Mot de passe incorrect", 400);
   }
 
   const token = jwt.sign(

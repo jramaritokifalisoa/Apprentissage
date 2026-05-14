@@ -3,19 +3,21 @@ const {
   userAllDetail,
   removeAllUser,
 } = require("../repository/users");
+const AppError = require("../utils/AppError");
 module.exports.listUsers = async (user) => {
   if (!user) {
-    throw new Error("Veuillez vous connecter !!");
+    throw new AppError("Veuillez vous connecter !!", 401);
   }
 
   const userRole = typeof user.role === "object" ? user.role.name : user.role;
   if (userRole !== "admin" && userRole !== "SuperAdmin") {
-    throw new Error(
-       "Accès refusé : seuls les admins peut voir les users",
+    throw new AppError(
+      "Accès refusé : seuls les admins peut voir les users",
+      403,
     );
   }
 
-  const result = await getAllUsers();
+  const result = await getAllUsers((role = 2));
   return {
     message: "Liste des utilisateurs",
     resultat: result.rows,
@@ -24,15 +26,17 @@ module.exports.listUsers = async (user) => {
 module.exports.detailsUser = async (data, user) => {
   const { id } = data;
   if (!user) {
-    throw new Error("Veuillez vous connecter !!");
+    throw new AppError("Veuillez vous connecter !!", 401);
   }
 
   const userRole = typeof user.role === "object" ? user.role.name : user.role;
   if (userRole !== "admin" && userRole !== "SuperAdmin") {
-    throw new Error("Accès refusé : seuls les admins peut voir les details users",
+    throw new AppError(
+      "Accès refusé : seuls les admins peut voir les details users",
+      400,
     );
   }
-  const result = await userAllDetail(id);
+  const result = await userAllDetail(id, (role = 2));
   return {
     message: "Détails d'un utilisateur",
     result: result.rows,
@@ -43,14 +47,16 @@ module.exports.userRemove = async (data, user) => {
 
   const userRole = typeof user.role === "object" ? user.role.name : user.role;
   if (userRole !== "admin" && userRole !== "SuperAdmin") {
-    throw new Error("Accès refusé : seuls les admins peuvent suprimer les users",
+    throw new AppError(
+      "Accès refusé : seuls les admins peuvent suprimer les users",
+      403,
     );
   }
 
-  const result = await removeAllUser(id);
+  const result = await removeAllUser(id, (role = 2));
 
   if (result.rowCount === 0) {
-    throw new Error("Utilisateur non trouvé" );
+    throw new AppError("Utilisateur non trouvé", 404);
   }
 
   return { message: "Utilisateur et ses données supprimés" };
