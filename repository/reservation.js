@@ -8,10 +8,10 @@ module.exports.addReservation = async (voyage_id, nom, places) => {
   const client = await db.connect();
 
   try {
-    await client.query('BEGIN');
+    await client.query("BEGIN");
     const updateVoyage = await client.query(
       "UPDATE voyages SET places = places - $1 WHERE id = $2 AND places >= $1 RETURNING *",
-      [places, voyage_id]
+      [places, voyage_id],
     );
     if (updateVoyage.rowCount === 0) {
       throw new Error("Nombre de places insuffisant ou voyage introuvable");
@@ -19,19 +19,16 @@ module.exports.addReservation = async (voyage_id, nom, places) => {
 
     const result = await client.query(
       "INSERT INTO reservations(voyage_id, nom, places) VALUES($1, $2, $3) RETURNING *",
-      [voyage_id, nom, places]
+      [voyage_id, nom, places],
     );
 
-    await client.query('COMMIT');
-    
-    return result.rows[0];
+    await client.query("COMMIT");
 
+    return result.rows[0];
   } catch (error) {
-   
-    await client.query('ROLLBACK');
+    await client.query("ROLLBACK");
     throw error;
   } finally {
-
     client.release();
   }
 };
@@ -68,5 +65,32 @@ module.exports.removeAll = async (id, nom) => {
     "DELETE FROM reservations WHERE id = $1 AND nom = $2 RETURNING *",
     [id, nom],
   );
+  return result;
+};
+
+module.exports.removeAll = async (id, nom = null) => {
+  let result;
+
+  if (!nom) {
+    result = await db.query(
+      `
+      DELETE FROM reservations
+      WHERE id = $1
+      RETURNING *
+      `,
+      [id],
+    );
+  } else {
+    result = await db.query(
+      `
+      DELETE FROM reservations
+      WHERE id = $1
+      AND nom = $2
+      RETURNING *
+      `,
+      [id, nom],
+    );
+  }
+
   return result;
 };

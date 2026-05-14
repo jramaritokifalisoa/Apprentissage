@@ -11,7 +11,7 @@ module.exports.voyageList = async () => {
   return result;
 };
 module.exports.createVoyage = async (data, user) => {
-  const { depart , arrivée , prix, Nombre_place } = data;
+  const { depart, arrivee, prix, Nombre_place } = data;
 
   if (!user) {
     throw new Error("Utilisateur non authentifié");
@@ -19,7 +19,7 @@ module.exports.createVoyage = async (data, user) => {
 
   const userRole = typeof user.role === "object" ? user.role.name : user.role;
 
-  if (!depart || !arrivée || !prix || !Nombre_place) {
+  if (!depart || !arrivee || !prix || !Nombre_place) {
     throw new Error("Données manquantes");
   }
   if (userRole !== "admin" && userRole !== "SuperAdmin") {
@@ -27,7 +27,7 @@ module.exports.createVoyage = async (data, user) => {
       "Accès refusé : Seuls les admins peuvent créer des voyages",
     );
   }
-  const destination = `${depart} -> ${arrivée}`;
+  const destination = `${depart} -> ${arrivee}`;
 
   const result = await addvoyage(destination, prix, Nombre_place);
 
@@ -50,13 +50,12 @@ module.exports.findVoyage = async (data) => {
   };
 };
 module.exports.voyageUpdate = async (data, user) => {
-  const { depart , arrivée , prix, Nombre_place } = data;
+  const { depart, arrivee, prix, Nombre_place } = data;
   const { id } = data;
 
   const userRole = typeof user.role === "object" ? user.role.name : user.role;
 
-
-  if (!depart , !arrivée || !prix || !Nombre_place) {
+  if ((!depart, !arrivee || !prix || !Nombre_place)) {
     throw new Error("Données manquantes");
   }
 
@@ -66,7 +65,7 @@ module.exports.voyageUpdate = async (data, user) => {
     );
   }
 
-  const destination = `${depart} -> ${arrivée}`;
+  const destination = `${depart} - ${arrivee}`;
   const result = await updateVoyage(id, destination, prix, Nombre_place);
 
   if (result.rowCount === 0) {

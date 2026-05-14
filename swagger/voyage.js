@@ -18,13 +18,13 @@ module.exports = {
           "application/json": {
             schema: {
               type: "object",
-              required: ["départ", "arrivée", "prix", "admin_id"],
+              required: ["depart", "arrivee", "prix", "Nombre_place"],
               properties: {
-                départ: {
+                depart: {
                   type: "string",
                   example: "Antananarivo",
                 },
-                Arrivée : {
+                arrivee: {
                   type: "string",
                   example: "Antananarivo",
                 },
@@ -104,9 +104,13 @@ module.exports = {
           "application/json": {
             schema: {
               type: "object",
-              required: ["destination", "prix", "admin_id"],
+              required: ["depart", "arrivee", "prix", "Nombre_place"],
               properties: {
-                destination: {
+                depart: {
+                  type: "string",
+                  example: "Antananarivo",
+                },
+                arrivee: {
                   type: "string",
                   example: "Antananarivo",
                 },

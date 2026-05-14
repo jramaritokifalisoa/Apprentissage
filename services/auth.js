@@ -20,7 +20,7 @@ module.exports.userRegister = async (data) => {
   }
 
   const check = await getUsers(name);
-  const role = "user";
+  const role = 2;
   if (check.rows.length > 0) throw new Error("Utilisateur déjà existant");
 
   const hashedPassword = await bcrypt.hash(password, 10);
@@ -32,7 +32,7 @@ module.exports.userRegister = async (data) => {
     message: "Utilisateur créé avec succès",
     data: {
       name: newUser[0].name,
-      role: role,
+      role: "user",
     },
   };
 };
