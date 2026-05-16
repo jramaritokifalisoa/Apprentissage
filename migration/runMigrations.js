@@ -4,10 +4,14 @@ const client = require("../db");
 
 async function runMigrations() {
   try {
-
     console.log("Connected to PostgreSQL");
 
-    const files = ["000_roles.sql","001_users.sql", "002_voyages.sql", "003_reservations.sql"];
+    const files = [
+      "000_roles.sql",
+      "001_users.sql",
+      "002_voyages.sql",
+      "003_reservations.sql",
+    ];
 
     for (const file of files) {
       const sql = fs.readFileSync(
@@ -16,18 +20,15 @@ async function runMigrations() {
       );
 
       await client.query(sql);
+
       console.log(`Executed: ${file}`);
     }
 
     console.log("All migrations done");
-
-    await client.end();
-    process.exit(0);
   } catch (err) {
     console.error("Migration error:", err);
-    await client.end();
-    process.exit(1);
+    throw err;
   }
 }
 
-runMigrations();
+module.exports = runMigrations;

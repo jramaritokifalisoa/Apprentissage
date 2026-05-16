@@ -2,8 +2,9 @@
 Une API REST développée avec Node.js et PostgreSQL, intégrant Swagger pour les tests et la documentation, permettant la gestion des réservations de voyage en temps réel avec un système d’authentification sécurisé via JWT.                                  
 
 
-Sommaire :                                                                                                                     
- _Fonctionnalités                                                                                            
+Sommaires:                                                                                                                     
+ _Fonctionnalités
+
  _Technologies                                                                                                        
  _Architecture                                                                                                  
  _Installation                                                                                                                  
@@ -75,3 +76,8 @@ _Auteurs   :
 RAMARITOKIFALISOA Jocyl Nardo - Développeur Fullstack - www.linkedin.com/in/jocyl-nardo-ramaritokifalisoa-563b982b2
 s
 
+
+
+side
+filtrer destination(recherche)
+role->user voyage->reservation

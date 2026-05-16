@@ -1,4 +1,9 @@
 {
+    "scripts": {
+    "start": "node app.js",
+    "dev": "nodemon app.js",
+    "migrate": "node migration/runMigrations.js"
+  },
   "dependencies": {
     "babel-register": "^6.26.0",
     "bcrypt": "^6.0.0",
@@ -10,4 +15,5 @@
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.1"
   }
+ 
 }

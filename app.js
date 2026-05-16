@@ -4,6 +4,7 @@ const swaggerDocument = require("./swagger/index.js");
 const authRoutes = require("./routes/auth.js");
 const apivoyage = require("./routes/voyage.js");
 const apiUsers = require("./routes/users.js");
+const runMigrations = require("./migration/runMigrations");
 const apireservation = require("./routes/reservation.js");
 require("dotenv").config();
 const app = express();
@@ -25,6 +26,17 @@ app.use("/", authRoutes);
 app.use("/", apivoyage);
 app.use("/", apireservation);
 app.use("/", apiUsers);
-app.listen(port, () => {
-  console.log("Serveur démarré " + port);
-});
+
+async function startServer() {
+  try {
+    await runMigrations();
+
+    app.listen(port, () => {
+      console.log("Serveur démarré " + port);
+    });
+  } catch (error) {
+    console.error("Impossible de démarrer :", error);
+  }
+}
+
+startServer();
