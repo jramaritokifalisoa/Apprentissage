@@ -6,6 +6,7 @@ const {
   addUsers,
   getUsers,
   findName,
+  SelectRoleId,
   checkUsers,
 } = require("../repository/auth");
 module.exports.userRegister = async (data) => {
@@ -20,13 +21,22 @@ module.exports.userRegister = async (data) => {
   }
 
   const check = await getUsers(name);
-  const role = 2;
-  if (check.rows.length > 0)
+  if (check.rows.length > 0) {
     throw new AppError("Utilisateur déjà existant", 400);
+  }
 
   const hashedPassword = await bcrypt.hash(password, 10);
 
-  const newUser = await addUsers(name, hashedPassword, role);
+  // 🔥 GET ROLE ID from DB (IMPORTANT)
+  const roleResult = await SelectRoleId("user");
+
+  if (roleResult.rows.length === 0) {
+    throw new AppError("Role user introuvable (seed manquant)", 500);
+  }
+
+  const roleId = roleResult.rows[0].id;
+
+  const newUser = await addUsers(name, hashedPassword, roleId);
 
   return {
     success: true,
@@ -37,7 +47,6 @@ module.exports.userRegister = async (data) => {
     },
   };
 };
-
 module.exports.userProfil = async (user) => {
   if (!user.name) {
     throw new AppError("Nom manquant", 400);
@@ -79,7 +88,7 @@ module.exports.userLogin = async (data) => {
     };
   }
 
-  const result = await getUsers(name);
+  const result = await getUsers(name, true);
 
   if (result.rows.length === 0) {
     throw new AppError("Utilisateur introuvable", 404);
@@ -97,7 +106,7 @@ module.exports.userLogin = async (data) => {
     {
       id: user.id,
       name: user.name,
-      role: user.role?.name ?? user.role,
+      role: user.role_name,
     },
     process.env.SECRET_KEY,
     { expiresIn: "1h" },
@@ -106,6 +115,10 @@ module.exports.userLogin = async (data) => {
   return {
     message: "Connexion réussie",
     token,
-    data: user,
+    data: {
+      id: user.id,
+      name: user.name,
+      role: user.role_name,
+    },
   };
 };
