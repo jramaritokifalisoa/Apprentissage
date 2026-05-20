@@ -1,8 +1,18 @@
 const db = require("../db");
 
-module.exports.getAllVoyage = async () => {
-  const result = await db.query("SELECT * FROM voyages ORDER BY id ASC");
-  return result.rows;
+module.exports.getAllVoyage = async (destination) => {
+  if (destination && destination.length > 0) {
+    const queryText =
+      "SELECT * FROM voyages WHERE destination ILIKE $1 ORDER BY id ASC";
+
+    const values = [`%${destination}%`];
+
+    const result = await db.query(queryText, values);
+    return result.rows;
+  } else {
+    const result = await db.query("SELECT * FROM voyages ORDER BY id ASC");
+    return result.rows;
+  }
 };
 module.exports.getVoyage = async (id) => {
   const result = await db.query(

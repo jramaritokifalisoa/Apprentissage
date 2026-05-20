@@ -78,6 +78,3 @@ s
 
 
 
-side
-filtrer destination(recherche)
-role->user voyage->reservation

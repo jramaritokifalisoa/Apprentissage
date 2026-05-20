@@ -4,6 +4,19 @@ module.exports = {
   "/api/voyages": {
     get: {
       summary: "Liste des voyages",
+      // On remplace requestBody par parameters
+      parameters: [
+        {
+          name: "destination",
+          in: "query", // Indique que le paramètre sera dans l'URL (?destination=...)
+          required: false, // FAUX ! Comme ça, si c'est vide, on affiche tous les voyages
+          description: "Le nom ou les premières lettres de la destination",
+          schema: {
+            type: "string",
+            example: "Antananarivo",
+          },
+        },
+      ],
       responses: {
         200: {
           description: "Liste récupérée",

@@ -8,7 +8,8 @@ const {
 
 module.exports.showAllVoyage = async (req, res, next) => {
   try {
-    const resultfinal = await voyageList();
+    console.log("==> QUERY REÇUE DANS LE CONTROLEUR :", req.query);
+    const resultfinal = await voyageList(req.query);
     res.status(200).send(resultfinal);
   } catch (err) {
     next(err);

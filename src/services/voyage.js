@@ -7,8 +7,11 @@ const {
   removeVoyage,
 } = require("../repository/voyage");
 const AppError = require("../utils/AppError");
-module.exports.voyageList = async () => {
-  const result = await getAllVoyage();
+module.exports.voyageList = async (data) => {
+  console.log("Données reçues de Swagger :", data);
+  const destination = data && data.destination ? data.destination.trim() : "";
+
+  const result = await getAllVoyage(destination);
   return result;
 };
 module.exports.createVoyage = async (data, user) => {
