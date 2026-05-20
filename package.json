@@ -1,8 +1,11 @@
 {
-    "scripts": {
-    "start": "node app.js",
-    "dev": "nodemon app.js",
-    "migrate": "node migration/runMigrations.js"
+  "scripts": {
+    "clean": "rimraf dist",
+    "copy": "copyfiles -u 1 src/**/* dist",
+    "build": "npm run clean && npm run copy",
+    "start": "node src/app.js",
+    "dev": "nodemon src/app.js",
+    "migrate": "node src/migration/runMigrations.js"
   },
   "dependencies": {
     "babel-register": "^6.26.0",
@@ -14,6 +17,9 @@
     "pg": "^8.20.0",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.1"
+  },
+  "devDependencies": {
+    "copyfiles": "^2.4.1",
+    "rimraf": "^6.1.3"
   }
- 
 }
