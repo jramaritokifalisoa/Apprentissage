@@ -9,7 +9,7 @@ module.exports = {
             schema: {
               type: "object",
               properties: {
-                name: {
+                email: {
                   type: "string",
                 },
                 password: {
@@ -41,7 +41,7 @@ module.exports = {
             schema: {
               type: "object",
               properties: {
-                name: {
+                email: {
                   type: "string",
                 },
                 password: {

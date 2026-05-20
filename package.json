@@ -4,7 +4,8 @@
     "copy": "copyfiles -u 1 src/**/* dist",
     "build": "npm run clean && npm run copy",
     "start": "node src/app.js",
-    "dev": "nodemon src/app.js && node src/seed.js",
+    "dev": "nodemon src/app.js ",
+    "seed": " node src/seed.js",
     "migrate": "node src/migration/runMigrations.js"
   },
   "dependencies": {

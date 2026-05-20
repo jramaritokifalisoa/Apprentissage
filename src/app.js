@@ -4,7 +4,7 @@ const swaggerDocument = require("./swagger/index.js");
 const authRoutes = require("./routes/auth.js");
 const apivoyage = require("./routes/voyage.js");
 const apiUsers = require("./routes/users.js");
-const runMigrations = require("./migration/runMigrations");
+
 const apireservation = require("./routes/reservation.js");
 require("dotenv").config();
 const app = express();
@@ -29,8 +29,6 @@ app.use("/", apiUsers);
 
 async function startServer() {
   try {
-    await runMigrations();
-
     app.listen(port, () => {
       console.log("Serveur démarré " + port);
     });

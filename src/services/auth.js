@@ -1,97 +1,80 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
+
 const AppError = require("../utils/AppError");
 const {
   addUsers,
   getUsers,
-  findName,
   SelectRoleId,
-  checkUsers,
+  findEmail,
 } = require("../repository/auth");
-module.exports.userRegister = async (data) => {
-  const { name, password, confirmPassword } = data;
 
-  if (!name || !password || !confirmPassword) {
-    throw new AppError("Utilisateur non authentifié", 401);
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+module.exports.userRegister = async (data) => {
+  let { email, password, confirmPassword } = data;
+  email = email?.trim().toLowerCase();
+  password = password?.trim();
+  confirmPassword = confirmPassword?.trim();
+
+  if (!email || !password || !confirmPassword) {
+    throw new AppError("Champs obligatoires manquants", 400);
+  }
+
+  if (!emailRegex.test(email)) {
+    throw new AppError("Format email invalide", 400);
   }
 
   if (password !== confirmPassword) {
     throw new AppError("Les mots de passe ne correspondent pas", 400);
   }
 
-  const check = await getUsers(name);
+  const check = await getUsers(email);
   if (check.rows.length > 0) {
-    throw new AppError("Utilisateur déjà existant", 400);
+    throw new AppError(
+      "Si ce compte peut être créé, un email sera envoyé",
+      400,
+    );
   }
 
   const hashedPassword = await bcrypt.hash(password, 10);
 
-  // 🔥 GET ROLE ID from DB (IMPORTANT)
   const roleResult = await SelectRoleId("user");
-
   if (roleResult.rows.length === 0) {
-    throw new AppError("Role user introuvable (seed manquant)", 500);
+    throw new AppError("Rôle user introuvable en base de données", 500);
   }
 
   const roleId = roleResult.rows[0].id;
-
-  const newUser = await addUsers(name, hashedPassword, roleId);
+  const newUser = await addUsers(email, hashedPassword, roleId);
 
   return {
     success: true,
-    message: "Utilisateur créé avec succès",
+    message: "Compte créé avec succès",
     data: {
-      name: newUser[0].name,
+      email: newUser[0].email,
       role: "user",
     },
   };
 };
-module.exports.userProfil = async (user) => {
-  if (!user.name) {
-    throw new AppError("Nom manquant", 400);
-  }
-  const result = await findName(user.name);
-  if (result.rows.length === 0) {
-    throw new AppError("Identifiant invalide", 404);
-  }
-  return {
-    success: true,
-    message: "Utilisateur trouvé avec succès",
-    data: result.rows[0],
-  };
-};
+
 module.exports.userLogin = async (data) => {
-  const { name, password } = data;
+  let { email, password } = data;
+  email = email?.trim().toLowerCase();
+  password = password?.trim();
 
-  if (
-    name === process.env.ADMIN_NAME &&
-    password === process.env.ADMIN_PASSWORD
-  ) {
-    const token = jwt.sign(
-      {
-        id: 0,
-        name: process.env.ADMIN_NAME,
-        role: "admin",
-      },
-      process.env.SECRET_KEY,
-      { expiresIn: "1h" },
-    );
-
-    return {
-      message: "Connexion admin réussie",
-      token,
-      data: {
-        name: process.env.ADMIN_NAME,
-        role: "admin",
-      },
-    };
+  if (!email || !password) {
+    throw new AppError("Email et mot de passe requis", 400);
   }
 
-  const result = await getUsers(name, true);
+  if (!emailRegex.test(email)) {
+    throw new AppError("Format email invalide", 400);
+  }
+
+  const result = await getUsers(email);
 
   if (result.rows.length === 0) {
-    throw new AppError("Utilisateur introuvable", 404);
+    throw new AppError("Identifiants incorrects", 401);
   }
 
   const user = result.rows[0];
@@ -99,13 +82,13 @@ module.exports.userLogin = async (data) => {
   const checkPassword = await bcrypt.compare(password, user.password);
 
   if (!checkPassword) {
-    throw new AppError("Mot de passe incorrect", 400);
+    throw new AppError("Identifiants incorrects", 401);
   }
 
   const token = jwt.sign(
     {
       id: user.id,
-      name: user.name,
+      email: user.email,
       role: user.role_name,
     },
     process.env.SECRET_KEY,
@@ -117,8 +100,25 @@ module.exports.userLogin = async (data) => {
     token,
     data: {
       id: user.id,
-      name: user.name,
+      email: user.email,
       role: user.role_name,
     },
+  };
+};
+
+module.exports.userProfil = async (user) => {
+  if (!user.email) {
+    throw new AppError("Email manquant", 400);
+  }
+
+  const result = await findEmail(user.email);
+  if (result.rows.length === 0) {
+    throw new AppError("Identifiant invalide", 404);
+  }
+
+  return {
+    success: true,
+    message: "Utilisateur trouvé avec succès",
+    data: result.rows[0],
   };
 };
