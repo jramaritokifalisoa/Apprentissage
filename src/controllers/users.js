@@ -17,7 +17,7 @@ module.exports.showDetailUser = async (req, res, next) => {
 };
 module.exports.remove = async (req, res, next) => {
   try {
-    const resultfinal = await detailsUser(req.params, req.user);
+    const resultfinal = await userRemove(req.params, req.user);
     res.status(200).send(resultfinal);
   } catch (err) {
     next(err);

@@ -7,25 +7,10 @@ module.exports.userAllDetail = async (id, roleId) => {
   const query = "SELECT * FROM users WHERE id = $1 AND role_id = $2";
   return await db.query(query, [id, roleId]);
 };
-module.exports.removeAllUser = async (id, roleId) => {
-  const client = await db.connect();
-  try {
-    await client.query("BEGIN");
-
-    await client.query("DELETE FROM roles WHERE id = $1", [id]);
-
-    const result = await client.query(
-      "DELETE FROM users WHERE id = $1 AND role_id = $2 RETURNING *",
-      [id, roleId],
-    );
-
-    await client.query("COMMIT");
-
-    return result;
-  } catch (err) {
-    await client.query("ROLLBACK");
-    throw err;
-  } finally {
-    client.release();
-  }
+module.exports.removeAllUser = async (id) => {
+  const result = await db.query(
+    "DELETE FROM users WHERE id = $1 RETURNING *",
+    [parseInt(id, 10)], // Sécurité pour s'assurer que c'est un nombre
+  );
+  return result;
 };

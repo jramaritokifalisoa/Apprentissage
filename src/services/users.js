@@ -17,7 +17,7 @@ module.exports.listUsers = async (user) => {
     );
   }
 
-  const result = await getAllUsers(2);
+  const result = await getAllUsers(1);
   return {
     message: "Liste des utilisateurs",
     resultat: result.rows,
@@ -36,7 +36,7 @@ module.exports.detailsUser = async (data, user) => {
       400,
     );
   }
-  const result = await userAllDetail(id, 2);
+  const result = await userAllDetail(id, 1);
   return {
     message: "Détails d'un utilisateur",
     result: result.rows,
@@ -53,7 +53,7 @@ module.exports.userRemove = async (data, user) => {
     );
   }
 
-  const result = await removeAllUser(id, 2);
+  const result = await removeAllUser(id, 1);
 
   if (result.rowCount === 0) {
     throw new AppError("Utilisateur non trouvé", 404);
