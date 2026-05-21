@@ -65,9 +65,9 @@ Crée un fichier .env à la racine et remplis-le comme suit :
 
 _Documentation API    :                                                                                                      
  lancé ce commande dans votre terminal :                                                                                       
- node migration/runMigrations                                                                                             
+ npm run seed        : pour generer automatiquement les tables avec la migration                                                                                   
  puis                                                                                                                          
- lancé le serveur : nodemon app.js                                                                                              
+ lancé le serveur :npm run dev : pour lancer l'application                                                                                           
  
  Une fois le serveur lancé, la documentation interactive est disponible ici :                                  
   http://localhost:5020/api-docs                                                                                                    
