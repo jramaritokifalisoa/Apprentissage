@@ -1,25 +1,22 @@
 const db = require("../db");
-module.exports.getAllUsers = async (role) => {
-  const result = await db.query("SELECT * FROM users WHERE role = $1", [role]);
-  return result;
+module.exports.getAllUsers = async (roleId) => {
+  const query = "SELECT * FROM users WHERE role_id = $1";
+  return await db.query(query, [roleId]);
 };
-module.exports.userAllDetail = async (id, role) => {
-  const result = await db.query(
-    "SELECT * FROM users WHERE id = $1 AND role = $2",
-    [id, role],
-  );
-  return result;
+module.exports.userAllDetail = async (id, roleId) => {
+  const query = "SELECT * FROM users WHERE id = $1 AND role_id = $2";
+  return await db.query(query, [id, roleId]);
 };
-module.exports.removeAllUser = async (id, role) => {
+module.exports.removeAllUser = async (id, roleId) => {
   const client = await db.connect();
   try {
     await client.query("BEGIN");
 
-    await client.query("DELETE FROM roles WHERE user_id = $1", [id]);
+    await client.query("DELETE FROM roles WHERE id = $1", [id]);
 
     const result = await client.query(
-      "DELETE FROM users WHERE id = $1 AND role = $2 RETURNING *",
-      [id, role],
+      "DELETE FROM users WHERE id = $1 AND role_id = $2 RETURNING *",
+      [id, roleId],
     );
 
     await client.query("COMMIT");
