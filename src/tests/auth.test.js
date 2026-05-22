@@ -41,7 +41,7 @@ describe("Tests d'Intégration Réels - userLogin", () => {
   it("devrait rejeter la connexion si l'email n'existe pas du tout", async () => {
     await expect(
       authService.userLogin({
-        email: "compte_inexistant_du_futur@gmail.com",
+        email: "compte_inexistant@gmail.com",
         password: "AnyPassword123!",
       }),
     ).rejects.toThrow("Identifiants incorrects");
