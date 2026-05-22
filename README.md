@@ -66,7 +66,9 @@ Crée un fichier .env à la racine et remplis-le comme suit :
 _Documentation API    :                                                                                                      
  lancé ce commande dans votre terminal :                                                                                       
  npm run seed        : pour generer automatiquement les tables avec la migration                                                                                   
- puis                                                                                                                          
+ puis   
+
+commande pour lancer test unitaire : npm vitest auth :pour voir tout simplement auth et etc... faut changer le auth par users , reservation...                                                                                                
  lancé le serveur :npm run dev : pour lancer l'application                                                                                           
  
  Une fois le serveur lancé, la documentation interactive est disponible ici :                                  
