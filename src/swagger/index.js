@@ -11,7 +11,12 @@ module.exports = {
   },
   servers: [
     {
+      url: "https://ton-api.onrender.com",
+      description: "Serveur de Production ",
+    },
+    {
       url: "http://localhost:4000",
+      description: "Serveur Local",
     },
   ],
   paths: {
