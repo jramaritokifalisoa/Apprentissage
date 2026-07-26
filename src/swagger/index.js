@@ -12,12 +12,7 @@ module.exports = {
   },
   servers: [
     {
-      url: "https://mon-api-rest.vercel.app",
-      description: "Serveur de Production",
-    },
-    {
       url: "http://localhost:4000",
-      description: "Serveur Local",
     },
   ],
   paths: {
