@@ -4,7 +4,6 @@
     "copy": "copyfiles -u 1 src/**/* dist",
     "build": "npm run clean && npm run copy",
     "start": "node src/app.js",
-    "install": "npm install ",
     "dev": "nodemon src/app.js ",
     "seed": " node src/seed.js",
     "test": "vitest",
