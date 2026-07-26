@@ -12,7 +12,7 @@ module.exports = {
   },
   servers: [
     {
-      url: "https://mon-api-backend.onrender.com",
+      url: "https://mon-api-rest.vercel.app",
       description: "Serveur de Production",
     },
     {
