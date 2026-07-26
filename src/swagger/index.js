@@ -2,6 +2,7 @@ const authPaths = require("./auth");
 const voyagePaths = require("./voyage");
 const UsersPath = require("./users");
 const reservationPaths = require("./reservation");
+
 module.exports = {
   openapi: "3.0.0",
   info: {
@@ -12,7 +13,7 @@ module.exports = {
   servers: [
     {
       url: "https://mon-api-backend.onrender.com",
-      description: "Serveur de Production ",
+      description: "Serveur de Production",
     },
     {
       url: "http://localhost:4000",

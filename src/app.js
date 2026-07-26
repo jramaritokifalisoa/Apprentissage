@@ -8,7 +8,7 @@ const apiUsers = require("./routes/users.js");
 const apireservation = require("./routes/reservation.js");
 require("dotenv").config();
 const app = express();
-const port = 4000;
+const port = process.env.PORT || 4000;
 const cors = require("cors");
 app.use(
   cors({
