@@ -29,12 +29,15 @@ app.use("/", apiUsers);
 
 async function startServer() {
   try {
-    app.listen(port, () => {
-      console.log("Serveur démarré " + port);
-    });
+    if (process.env.NODE_ENV !== "production") {
+      app.listen(port, () => {
+        console.log("Serveur démarré en local sur le port " + port);
+      });
+    }
   } catch (error) {
     console.error("Impossible de démarrer :", error);
   }
 }
 
 startServer();
+module.exports = app;
